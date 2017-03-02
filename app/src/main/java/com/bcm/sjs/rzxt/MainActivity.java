@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public  static  String TAG="MainActivity";
+    private String TAG = this.getClass().getSimpleName();
 
     private List<TabItem> mTableItemList;
 

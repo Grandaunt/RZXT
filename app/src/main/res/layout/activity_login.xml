@@ -14,7 +14,6 @@
 <LinearLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-
     android:gravity="center"
     android:orientation="vertical">
 <ImageView
@@ -33,9 +32,10 @@
             android:layout_margin="10dp"
             android:src="@mipmap/ic_account"/>
  <EditText
+     android:id="@+id/et_acc"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
-     android:hint="请输入账号"
+     android:hint="@string/Input_useracc"
      android:layout_marginLeft="10dp"
      android:background="@null"
      android:textColor="@color/textColorWhite"
@@ -54,10 +54,11 @@
             android:layout_margin="10dp"
             android:src="@mipmap/ic_password"/>
         <EditText
+            android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword"
-            android:hint="请输入密码"
+            android:hint="@string/Input_password"
             android:background="@null"
             android:textColor="@color/textColorWhite"
             android:layout_marginLeft="10dp"
@@ -74,40 +75,41 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:background="@color/textViewBackground"
+            android:gravity="center"
             android:layout_weight="0.8">
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:src="@mipmap/ic_connect"/>
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:id="@+id/spinner"
-            android:dropDownSelector="@color/white"
+            android:gravity="left|center"
+            android:id="@+id/spinner_ip"
             android:layout_weight="1" />
 
 </LinearLayout>
         <ImageButton
-            android:text="Button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:id="@+id/button"
+            android:id="@+id/imbtn_ip_edit"
             android:src="@mipmap/ic_edit"
             android:background="@color/textViewBackground"/>
     </LinearLayout>
 
 
     <Button
+        android:id="@+id/btn_login"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_marginTop="35dp"
         android:background="@color/Buttoncolor"
         android:textColor="@color/textColorWhite"
-        android:text="登  录"
+        android:text="@string/login"
         android:textSize="22dp"/>
 </LinearLayout>
 </LinearLayout>

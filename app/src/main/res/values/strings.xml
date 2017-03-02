@@ -6,6 +6,12 @@
     <string name="tab1">任务</string>
     <string name="tab2">我</string>
 
+
+    <string name="Input_useracc">请输入账号</string>
+    <string name="Input_password">请输入密码</string>
+    <string name="login">登 录</string>
+
+
     <string name="my_update_text">版本更新</string>
     <string name="my_memo_text">备忘录</string>
     <string name="my_clear_text">清除缓存</string>
@@ -13,6 +19,13 @@
     <string name="my_setting_text">设置</string>
     <string name="my_out_text">退出</string>
     <string name="string_test">AAAAAAAAA</string>
+
+    <string name="connect_name">连接名</string>
+    <string name="server_IP">服务器</string>
+    <string name="port">端口</string>
+    <string name="ok">确 定</string>
+    <string name="sreach">搜 索</string>
+
 
     <!--<string name="main_home_text">首页</string>-->
     <!--<string name="main_mine_text">收藏</string>-->

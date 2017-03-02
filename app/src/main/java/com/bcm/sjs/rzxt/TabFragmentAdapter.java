@@ -10,7 +10,7 @@ import java.util.List;
  */
 //继承FragmentStatePagerAdapter
 public class TabFragmentAdapter extends FragmentStatePagerAdapter {
-
+    private String TAG = this.getClass().getSimpleName();
     public static final String TAB_TAG = "@dream@";
 
     private List<String> mTitles;

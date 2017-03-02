@@ -18,7 +18,7 @@ import java.util.Arrays;
  */
 
 public class TabFragment1 extends  android.support.v4.app.Fragment {
-
+    private String TAG = this.getClass().getSimpleName();
     private View viewContent;
     private TabLayout tab_essence;
     private ViewPager vp_essence;

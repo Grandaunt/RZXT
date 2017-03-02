@@ -14,7 +14,7 @@ import android.widget.TextView;
  */
 
 public class ContentFragment extends ListFragment {
-
+    private String TAG = this.getClass().getSimpleName();
     private View viewContent;
     private int mType = 0;
     private String mTitle;
