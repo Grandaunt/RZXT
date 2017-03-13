@@ -29,17 +29,40 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mTableItemList = new ArrayList<>();
         initTabData();
         initTabHost();
     }
 
+    @Override
+    protected void onResume() {
+        if(mTableItemList.size()<2) {
+        initTabData();
+        initTabHost();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     //初始化Tab数据
     private void initTabData() {
-        mTableItemList = new ArrayList<>();
-        //添加tab
-        mTableItemList.add(new TabItem(R.mipmap.ic_event_noline,R.mipmap.ic_event_line,R.string.tab1, TabFragment1.class));
-        mTableItemList.add(new TabItem(R.mipmap.ic_my_noline,R.mipmap.ic_my_line,R.string.tab2, TabFragment2.class));
+            //添加tab
+            mTableItemList.add(new TabItem(R.mipmap.ic_event_noline, R.mipmap.ic_event_line, R.string.tab1, TabFragment1.class));
+            mTableItemList.add(new TabItem(R.mipmap.ic_my_noline, R.mipmap.ic_my_line, R.string.tab2, TabFragment2.class));
 
     }
 

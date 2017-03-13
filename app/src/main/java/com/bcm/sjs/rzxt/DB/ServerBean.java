@@ -11,6 +11,18 @@ public class ServerBean {
     private int error;
     private String msg;
     private User user;
+    private List<TaskBean> taskList;
+
+    public List<MediaBean> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<MediaBean> fileList) {
+        this.fileList = fileList;
+    }
+
+    private List<MediaBean> fileList;
+
 
     public List<TaskBean> getTaskList() {
         return taskList;
@@ -20,8 +32,7 @@ public class ServerBean {
         this.taskList = taskList;
     }
 
-    private List<TaskBean> taskList;
-    private Media media;
+
 
     public int getError() {
         return error;
@@ -49,13 +60,6 @@ public class ServerBean {
 
 
 
-    public Media getMedia() {
-        return media;
-    }
-
-    public void setMedia(Media media) {
-        this.media = media;
-    }
 
 
 
@@ -580,7 +584,7 @@ public class ServerBean {
 
 
 
-    public class Media{
+    public class MediaBean{
         //记录主键
         private String MT_ID;
 
@@ -589,43 +593,29 @@ public class ServerBean {
         private String MT_NAME;
         //模板项目信息
         private String MT_ITEM_INFO;
+
+        public String getMT_U_DESC() {
+            return MT_U_DESC;
+        }
+
+        public void setMT_U_DESC(String MT_U_DESC) {
+            this.MT_U_DESC = MT_U_DESC;
+        }
+
+        public String getMT_D_DESC() {
+            return MT_D_DESC;
+        }
+
+        public void setMT_D_DESC(String MT_D_DESC) {
+            this.MT_D_DESC = MT_D_DESC;
+        }
+
         //模板上传照片数量
-        private String MT_U_IM_NUM;
+        private String MT_U_DESC;
         //模板上传照片描述
-        private String MT_U_IM_DESC;
+        private String MT_D_DESC;
         //模板上传word数量
-        private String MT_U_W_NUM;
 
-
-        //模板上传word描述
-        private String MT_U_W_DESC;
-        //模板上传pdf数量
-        private String MT_U_P_NUM;
-        //模板上传pdf描述
-        private String MT_U_P_DESC;
-        //模板上传excel数量
-        private String MT_U_E_NUM;
-        //模板上传excel描述
-        private String MT_U_E_DESC;
-
-
-        //模板下载照片数量
-        private String MT_D_IM_NUM;
-        //模板上下载传照片描述
-        private String MT_D_IM_DESC;
-        //模板下载word数量
-        private String MT_D_W_NUM;
-        //模板下载word描述
-        private String MT_D_W_DESC;
-        //模板下载pdf数量
-        private String MT_D_P_NUM;
-
-        //模板下载pdf描述
-        private String MT_D_P_DESC;
-        //模板下载excel数量
-        private String MT_D_E_NUM;
-        //模板下载excel描述
-        private String MT_D_E_DESC;
         //模板备注
         private String MT_IS_NOTE;
 
@@ -633,13 +623,7 @@ public class ServerBean {
         //模板状态
         private String MT_STATUS;
 
-        public String getMT_D_E_NUM() {
-            return MT_D_E_NUM;
-        }
 
-        public void setMT_D_E_NUM(String MT_D_E_NUM) {
-            this.MT_D_E_NUM = MT_D_E_NUM;
-        }
 
         public String getMT_ID() {
             return MT_ID;
@@ -665,126 +649,6 @@ public class ServerBean {
             this.MT_ITEM_INFO = MT_ITEM_INFO;
         }
 
-        public String getMT_U_IM_NUM() {
-            return MT_U_IM_NUM;
-        }
-
-        public void setMT_U_IM_NUM(String MT_U_IM_NUM) {
-            this.MT_U_IM_NUM = MT_U_IM_NUM;
-        }
-
-        public String getMT_U_IM_DESC() {
-            return MT_U_IM_DESC;
-        }
-
-        public void setMT_U_IM_DESC(String MT_U_IM_DESC) {
-            this.MT_U_IM_DESC = MT_U_IM_DESC;
-        }
-
-        public String getMT_U_W_NUM() {
-            return MT_U_W_NUM;
-        }
-
-        public void setMT_U_W_NUM(String MT_U_W_NUM) {
-            this.MT_U_W_NUM = MT_U_W_NUM;
-        }
-
-        public String getMT_U_W_DESC() {
-            return MT_U_W_DESC;
-        }
-
-        public void setMT_U_W_DESC(String MT_U_W_DESC) {
-            this.MT_U_W_DESC = MT_U_W_DESC;
-        }
-
-        public String getMT_U_P_NUM() {
-            return MT_U_P_NUM;
-        }
-
-        public void setMT_U_P_NUM(String MT_U_P_NUM) {
-            this.MT_U_P_NUM = MT_U_P_NUM;
-        }
-
-        public String getMT_U_P_DESC() {
-            return MT_U_P_DESC;
-        }
-
-        public void setMT_U_P_DESC(String MT_U_P_DESC) {
-            this.MT_U_P_DESC = MT_U_P_DESC;
-        }
-
-        public String getMT_U_E_NUM() {
-            return MT_U_E_NUM;
-        }
-
-        public void setMT_U_E_NUM(String MT_U_E_NUM) {
-            this.MT_U_E_NUM = MT_U_E_NUM;
-        }
-
-        public String getMT_U_E_DESC() {
-            return MT_U_E_DESC;
-        }
-
-        public void setMT_U_E_DESC(String MT_U_E_DESC) {
-            this.MT_U_E_DESC = MT_U_E_DESC;
-        }
-
-        public String getMT_D_IM_NUM() {
-            return MT_D_IM_NUM;
-        }
-
-        public void setMT_D_IM_NUM(String MT_D_IM_NUM) {
-            this.MT_D_IM_NUM = MT_D_IM_NUM;
-        }
-
-        public String getMT_D_IM_DESC() {
-            return MT_D_IM_DESC;
-        }
-
-        public void setMT_D_IM_DESC(String MT_D_IM_DESC) {
-            this.MT_D_IM_DESC = MT_D_IM_DESC;
-        }
-
-        public String getMT_D_W_NUM() {
-            return MT_D_W_NUM;
-        }
-
-        public void setMT_D_W_NUM(String MT_D_W_NUM) {
-            this.MT_D_W_NUM = MT_D_W_NUM;
-        }
-
-        public String getMT_D_W_DESC() {
-            return MT_D_W_DESC;
-        }
-
-        public void setMT_D_W_DESC(String MT_D_W_DESC) {
-            this.MT_D_W_DESC = MT_D_W_DESC;
-        }
-
-        public String getMT_D_P_NUM() {
-            return MT_D_P_NUM;
-        }
-
-        public void setMT_D_P_NUM(String MT_D_P_NUM) {
-            this.MT_D_P_NUM = MT_D_P_NUM;
-        }
-
-        public String getMT_D_P_DESC() {
-            return MT_D_P_DESC;
-        }
-
-        public void setMT_D_P_DESC(String MT_D_P_DESC) {
-            this.MT_D_P_DESC = MT_D_P_DESC;
-        }
-
-        public String getMT_D_E_DESC() {
-            return MT_D_E_DESC;
-        }
-
-        public void setMT_D_E_DESC(String MT_D_E_DESC) {
-            this.MT_D_E_DESC = MT_D_E_DESC;
-        }
-
         public String getMT_IS_NOTE() {
             return MT_IS_NOTE;
         }
@@ -807,28 +671,13 @@ public class ServerBean {
                     "MT_ID='" + MT_ID + '\'' +
                     ", MT_NAME='" + MT_NAME + '\'' +
                     ", MT_ITEM_INFO='" + MT_ITEM_INFO + '\'' +
-                    ", MT_U_IM_NUM='" + MT_U_IM_NUM + '\'' +
-                    ", MT_U_IM_DESC='" + MT_U_IM_DESC + '\'' +
-                    ", MT_U_W_NUM='" + MT_U_W_NUM + '\'' +
-                    ", MT_U_W_DESC='" + MT_U_W_DESC + '\'' +
-                    ", MT_U_P_NUM='" + MT_U_P_NUM + '\'' +
-                    ", MT_U_P_DESC='" + MT_U_P_DESC + '\'' +
-                    ", MT_U_E_NUM='" + MT_U_E_NUM + '\'' +
-                    ", MT_U_E_DESC='" + MT_U_E_DESC + '\'' +
-                    ", MT_D_IM_NUM='" + MT_D_IM_NUM + '\'' +
-                    ", MT_D_IM_DESC='" + MT_D_IM_DESC + '\'' +
-                    ", MT_D_W_NUM='" + MT_D_W_NUM + '\'' +
-                    ", MT_D_W_DESC='" + MT_D_W_DESC + '\'' +
-                    ", MT_D_P_NUM='" + MT_D_P_NUM + '\'' +
-                    ", MT_D_P_DESC='" + MT_D_P_DESC + '\'' +
-                    ", MT_D_E_NUM='" + MT_D_E_NUM + '\'' +
-                    ", MT_D_E_DESC='" + MT_D_E_DESC + '\'' +
+                    ", MT_U_DESC='" + MT_U_DESC + '\'' +
+                    ", MT_D_DESC='" + MT_D_DESC + '\'' +
                     ", MT_IS_NOTE='" + MT_IS_NOTE + '\'' +
                     ", MT_STATUS='" + MT_STATUS + '\'' +
                     '}';
         }
     }
-
 
     @Override
     public String toString() {
@@ -837,6 +686,7 @@ public class ServerBean {
                 ", msg='" + msg + '\'' +
                 ", user=" + user +
                 ", taskList=" + taskList +
+                ", fileList=" + fileList +
                 '}';
     }
 }

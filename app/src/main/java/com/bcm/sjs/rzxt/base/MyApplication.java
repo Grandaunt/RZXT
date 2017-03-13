@@ -40,9 +40,9 @@ public class MyApplication extends Application {
         ThemeConfig theme = new ThemeConfig.Builder()
                 //标题栏背景颜色
 
-                .setTitleBarBgColor(Color.rgb(0x81, 0xC7, 0x84))
+                .setTitleBarBgColor(Color.rgb(0x35, 0x98, 0xdb))
                 //标题栏文本字体颜色
-                .setTitleBarTextColor(Color.rgb(0x66,0x66,0x66))
+                .setTitleBarTextColor(Color.rgb(0xff,0xff,0xff))
                 //设置Floating按钮Nornal状态颜色
                 .setFabNornalColor(Color.rgb(0xDD, 0xDD, 0xDD))
                 //设置Floating按钮Pressed状态颜色
@@ -59,7 +59,7 @@ public class MyApplication extends Application {
                 .setEnableCamera(false)//开启相机功能
                 .setEnableCrop(false)//开启裁剪功能
                 .setEnableRotate(false)//开启旋转功能
-                .setCropSquare(false)//裁剪正方形
+                .setCropSquare(true)//裁剪正方形
                 .setEnablePreview(true)//是否开启预览功能
                 .setRotateReplaceSource(true)//配置选择图片时是否替换原始图片，默认不替换
                 .build();

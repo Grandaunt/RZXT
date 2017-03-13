@@ -88,6 +88,7 @@
             android:layout_marginLeft="10dp"
             android:gravity="left|center"
             android:id="@+id/spinner_ip"
+            android:textColor="@color/textColorWhite"
             android:layout_weight="1" />
 
 </LinearLayout>

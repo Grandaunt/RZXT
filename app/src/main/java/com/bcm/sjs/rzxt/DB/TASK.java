@@ -30,7 +30,7 @@ public class TASK {
     //检查类型(首次检查、定期检查、不定期检查)
     public static final String TASK_CHECK_TYPE="task_check_type";
     //检查选项(按合同检查)
-    public static final String TASK_CHECK_OPTION="ln_check_option";
+    public static final String TASK_CHECK_OPTION="task_check_option";
     //任务检查人账号
     public static final String TASK_INER_ACC="task_iner_acc";
 
@@ -98,6 +98,9 @@ public class TASK {
     public static final String TASK_MT_ID="task_mt_id";
     //任务备注
     public static final String TASK_NOTE="task_note";
+    //申请单号
+    public static final String APPLY_ID="apply_id";
+
 
     //属性
 
@@ -120,7 +123,7 @@ public class TASK {
     //检查类型(首次检查、定期检查、不定期检查)
     public String task_check_type;
     //检查选项(按合同检查)
-    public String ln_check_option;
+    public String task_check_option;
     //任务检查人账号
     public String task_iner_acc;
 
@@ -182,9 +185,13 @@ public class TASK {
     public String task_com_con_ide;
     //申请产品介绍
     public String task_item_info;
+
+
     //信息采集模板ID
     public String task_mt_id;
     //任务备注
     public String task_note;
+    //申请单号
+    public String  apply_id;
 
 }

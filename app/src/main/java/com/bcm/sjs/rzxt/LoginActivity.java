@@ -1,8 +1,16 @@
 package com.bcm.sjs.rzxt;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,10 +33,13 @@ import com.bcm.sjs.rzxt.DB.TaskPro;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
@@ -42,6 +53,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView spr_IP;
     private SharedPreferences sharedPrefs;
     private ServerBean serverBean;
+    private Button ll_update;
+    private ProgressDialog pDialog;
+    private String nowVersion;
+    private ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,7 +74,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         imBtn_IP_Edit.setOnClickListener(this);
         btn_Login.setOnClickListener(this);
-
+        checkUpdate();
+        try {
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(
+                    getPackageName(), 0);
+            nowVersion = packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -76,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                if(TextUtils.isEmpty(spr_IP.getText())){
                     URL = "http://"+sharedPrefs.getString("CONNECT_IP", "null")+":"+sharedPrefs.getString("CONNECT_PORT", "null");
                     LoginHttp(ACC,PASSWORD,URL);
-                    test();
+//                    test();
 //                }
 //               else{
 //                    Toast.makeText(LoginActivity.this,"请设置连接",Toast.LENGTH_SHORT).show();
@@ -113,9 +136,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     ServerBean.User user = serverBean.getUser();
                     List<ServerBean.TaskBean> taskbeanList = serverBean.getTaskList();
-                    ServerBean.Media jsonmedia = serverBean.getMedia();
+                    List<ServerBean.MediaBean> mediabeanList = serverBean.getFileList();
+                    Log.i(TAG,"taskbeanList.size()="+taskbeanList.size());
+                    Log.i(TAG,"mediabeanList.size()="+mediabeanList.size());
                     if (taskbeanList.size() > 0) {
                         for (int i = 0; i < taskbeanList.size(); i++) {
+
                             ServerBean.TaskBean bean = taskbeanList.get(i);
                             TASK task = new TASK();
                             task.task_no = bean.getTASK_NO();
@@ -131,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             //检查类型(首次检查、定期检查、不定期检查)
                             task.task_check_type = bean.getTASK_CHECK_TYPE();
                             //检查选项(按合同检查)
-                            task.ln_check_option = bean.getTASK_CHECK_OPTION();
+                            task.task_check_option = bean.getTASK_CHECK_OPTION();
                             //任务检查人账号
                             task.task_iner_acc = bean.getTASK_INER_ACC();
 
@@ -208,68 +234,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 Log.i(TAG, "task表插入:" + bean.getTASK_NO());
                             }
                         }
+                    }
+                        if (mediabeanList.size() > 0) {
+                            for (int i = 0; i < mediabeanList.size(); i++) {
 
-                        MEDIA media = new MEDIA();
-                        //记录主键
-                        media.mt_id = jsonmedia.getMT_ID();
-                        //模板名称
-                        media.mt_name = jsonmedia.getMT_NAME();
-                        //模板项目信息
-                        media.mt_item_info = jsonmedia.getMT_ITEM_INFO();
-                        //模板上传照片数量
-                        media.mt_u_im_num = jsonmedia.getMT_U_IM_NUM();
-                        //模板上传照片描述
-                        media.mt_u_im_desc = jsonmedia.getMT_U_IM_DESC();
+                                ServerBean.MediaBean bean = mediabeanList.get(i);
 
+                                MEDIA media = new MEDIA();
+                                //记录主键
+                                media.mt_no = bean.getMT_ID();
+                                //模板名称
+                                media.mt_name = bean.getMT_NAME();
+                                //模板项目信息
+                                media.mt_item_info = bean.getMT_ITEM_INFO();
+                                //                        //模板上传照片数量
+                                media.mt_u_desc = bean.getMT_U_DESC();
+                                //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
+                                media.mt_d_desc = bean.getMT_D_DESC();
 
-                        //模板上传word数量
-                        media.mt_u_w_num = jsonmedia.getMT_U_W_NUM();
-                        //模板上传word描述
-                        media.mt_u_w_desc = jsonmedia.getMT_U_W_DESC();
-                        //模板上传pdf数量
-                        media.mt_u_p_num = jsonmedia.getMT_U_P_NUM();
-                        //模板上传pdf描述
-                        media.mt_u_p_desc = jsonmedia.getMT_U_P_DESC();
-                        //模板上传excel数量
-                        media.mt_u_e_num = jsonmedia.getMT_U_E_NUM();
+                                media.mt_is_note = bean.getMT_IS_NOTE();
 
 
-                        //模板上传excel描述
-                        media.mt_u_e_desc = jsonmedia.getMT_U_E_DESC();
-                        //模板下载照片数量
-                        media.mt_d_im_num = jsonmedia.getMT_D_IM_NUM();
-                        //模板上下载传照片描述
-                        media.mt_d_im_desc = jsonmedia.getMT_D_IM_DESC();
-                        //模板下载word数量
-                        media.mt_d_w_num = jsonmedia.getMT_D_W_NUM();
-                        //模板下载word描述
-                        media.mt_d_w_desc = jsonmedia.getMT_D_W_DESC();
+                                //模板状态
+                                media.mt_status = bean.getMT_STATUS();
+
+                                MediaPro repo1 = new MediaPro(context);
+                                if (repo1.getID(bean.getMT_ID())) {
+                                    repo1.update(media);
+                                    Log.i(TAG, "media表更新:" + bean.getMT_ID());
 
 
-                        //模板下载pdf数量
-                        media.mt_d_p_num = jsonmedia.getMT_D_P_NUM();
-                        //模板下载pdf描述
-                        media.mt_d_p_desc = jsonmedia.getMT_D_P_DESC();
-                        //模板下载excel数量
-                        media.mt_d_e_num = jsonmedia.getMT_D_E_NUM();
-                        //模板下载excel描述
-                        media.mt_d_e_desc = jsonmedia.getMT_D_E_DESC();
-                        //模板备注
-                        media.mt_is_note = jsonmedia.getMT_IS_NOTE();
+                                } else {
+                                    repo1.insert(media);
+                                    Log.i(TAG, "media表插入:" + bean.getMT_ID());
 
 
-                        //模板状态
-                        media.mt_status = jsonmedia.getMT_STATUS();
-
-                        MediaPro repo1 = new MediaPro(context);
-                        if (repo1.getID(jsonmedia.getMT_ID())) {
-                            repo1.update(media);
-                            Log.i(TAG, "media表更新:" + jsonmedia.getMT_ID());
-                        } else {
-                            repo1.insert(media);
-                            Log.i(TAG, "media表插入:" + jsonmedia.getMT_ID());
+                                }
+                            }
                         }
-
 
                         SharedPreferences.Editor editor = sharedPrefs.edit();
                         editor.putString("AUTH_TOKEN", user.getAUTH_TOKEN());
@@ -288,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         startActivity(intent);
                         finish();
 
-                    }
+
                 } else {
                     Log.i(TAG, "解析失败" + mag);
                     et_Acc.setText("");
@@ -302,6 +304,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                Toast.makeText(LoginActivity.this, "网络连接", Toast.LENGTH_LONG).show();
                 et_Acc.setText("");
                 et_Password.setText("");
+                Toast.makeText(LoginActivity.this, "请重新登录", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -311,19 +314,191 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFinished() {
+
                 Log.i("LogActivity","onFinished网络请求完毕");
             }
         });
 //            Toast.makeText(LoginActivity.this, "用户名或密码错误请重新输入", Toast.LENGTH_LONG).show();
 //
                             }
-        public  void test(){
-            //跳转Activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        public  void test(){
+//            //跳转Activity
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//
+//            startActivity(intent);
+//        }
+    /**
+     * 下载更新,
+     */
+    protected void checkUpdate() {
+        // TODO Auto-generated method stub
+        proDialogShow(LoginActivity.this, "正在查询...");
+        RequestParams params = new RequestParams("url");
+        x.http().get(params, new Callback.CommonCallback<String>() {
 
-            startActivity(intent);
+            @Override
+            public void onCancelled(CancelledException arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+                // TODO Auto-generated method stub
+                PDialogHide();
+                System.out.println("提示网络错误");
+            }
+
+            @Override
+            public void onFinished() {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onSuccess(String arg0) {
+                // TODO Auto-generated method stub
+                PDialogHide();
+                try {
+                    JSONObject object = new JSONObject(arg0);
+                    boolean success = object.getBoolean("succee");
+                    if (success) {
+                        String desc = object.getString("desc");
+                        String downloadurl = object.getString("downloadurl");
+                        String versionname = object.getString("versionname");
+                        if (nowVersion.equals(versionname)) {
+                            System.out.println("当前版本为最新，不用跟新");
+                        } else {
+                            // 不同，弹出更新提示对话框
+                            setUpDialog(versionname, downloadurl, desc);
+                        }
+                    }
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**
+     *
+     * @param versionname
+     *            地址中版本的名字
+     * @param downloadurl
+     *            下载包的地址
+     * @param desc
+     *            版本的描述
+     */
+    protected void setUpDialog(String versionname, final String downloadurl,
+                               String desc) {
+        // TODO Auto-generated method stub
+        AlertDialog dialog = new AlertDialog.Builder(this).setCancelable(false)
+                .setTitle("下载" + versionname + "版本").setMessage(desc)
+                .setNegativeButton("取消", null)
+                .setPositiveButton("下载", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // TODO Auto-generated method stub
+                        setDownLoad(downloadurl);
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    /**
+     * 下载包
+     *
+     * @param downloadurl
+     *            下载的url
+     *
+     */
+    @SuppressLint("SdCardPath")
+    protected void setDownLoad(String downloadurl) {
+        // TODO Auto-generated method stub
+        RequestParams params = new RequestParams(downloadurl);
+        params.setAutoRename(true);//断点下载
+        params.setSaveFilePath("/mnt/sdcard/demo.apk");
+        x.http().get(params, new Callback.ProgressCallback<File>() {
+
+            @Override
+            public void onCancelled(CancelledException arg0) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onError(Throwable arg0, boolean arg1) {
+                // TODO Auto-generated method stub
+                if(progressDialog!=null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+                System.out.println("提示更新失败");
+            }
+
+            @Override
+            public void onFinished() {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onSuccess(File arg0) {
+                // TODO Auto-generated method stub
+                if(progressDialog!=null && progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setDataAndType(Uri.fromFile(new File(Environment
+                                .getExternalStorageDirectory(), "demo.apk")),
+                        "application/vnd.android.package-archive");
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLoading(long arg0, long arg1, boolean arg2) {
+                // TODO Auto-generated method stub
+                progressDialog.setMax((int)arg0);
+                progressDialog.setProgress((int)arg1);
+            }
+
+            @Override
+            public void onStarted() {
+                // TODO Auto-generated method stub
+                System.out.println("开始下载");
+                progressDialog = new ProgressDialog(LoginActivity.this);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);//设置为水平进行条
+                progressDialog.setMessage("正在下载中...");
+                progressDialog.setProgress(0);
+                progressDialog.show();
+            }
+
+            @Override
+            public void onWaiting() {
+                // TODO Auto-generated method stub
+
+            }
+        });
+    }
+
+    private void proDialogShow(Context context, String msg) {
+        pDialog = new ProgressDialog(context);
+        pDialog.setMessage(msg);
+        // pDialog.setCancelable(false);
+        pDialog.show();
+    }
+
+    private void PDialogHide() {
+        try {
+            if (pDialog != null && pDialog.isShowing()) {
+                pDialog.dismiss();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+    }
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -335,6 +510,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onResume();
         Log.i(TAG,"onResume获取IP");
         Log.i(TAG,sharedPrefs.getString("CONNECT_NAME", "recome"));
+        URL = "http://"+sharedPrefs.getString("CONNECT_IP", "null")+":"+sharedPrefs.getString("CONNECT_PORT", "null");
         spr_IP.setText(sharedPrefs.getString("CONNECT_NAME", "recome"));
     }
 }

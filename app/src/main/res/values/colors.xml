@@ -20,7 +20,12 @@
     <color name="white">#fff</color>
     <color name="drak_line">#999</color>
     <color name="light_line">#ddd</color>
-
+    <color name="Orange">#ff9900</color>
+    <color name="Green">#00ff22</color>
+    <color name="Red">#ff4422</color>
+    <color name="Gray">#ccc</color>
+    <color name="light_blue">#bbeeff</color>
+    <color name="drak_blue">#1188ff</color>
 
     <color name="main_bottom_text_normal">#aa847d7b</color>
     <color name="main_botton_text_select">#1492ff</color>

@@ -28,57 +28,20 @@ public class MediaPro {
         ContentValues values=new ContentValues();
 
         //记录主键
-        values.put(MEDIA.MT_ID,media.mt_id);
+        values.put(MEDIA.MT_NO,media.mt_no);
         //模板名称
         values.put(MEDIA.MT_NAME,media.mt_name);
         //模板项目信息
         values.put(MEDIA.MT_ITEM_INFO,media.mt_item_info);
         //模板上传照片数量
-        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
+        values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
         //模板上传照片描述
-        values.put(MEDIA.MT_U_IM_DESC,media.mt_u_im_desc);
+        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
 
-
-        //模板上传word数量
-        values.put(MEDIA.MT_U_W_NUM,media.mt_u_w_num);
-        //模板上传word描述
-        values.put(MEDIA.MT_U_W_DESC,media.mt_u_w_desc);
-        //模板上传pdf数量
-        values.put(MEDIA.MT_U_P_NUM,media.mt_u_p_num);
-        //模板上传pdf描述
-        values.put(MEDIA.MT_U_P_DESC,media.mt_u_p_desc);
-        //模板上传excel数量
-        values.put(MEDIA.MT_U_E_NUM,media.mt_u_e_num);
-
-
-        //模板上传excel描述
-        values.put(MEDIA.MT_U_E_DESC,media.mt_u_e_desc);
-        //模板下载照片数量
-        values.put(MEDIA.MT_D_IM_NUM,media.mt_d_im_num);
-        //模板上下载传照片描述
-        values.put(MEDIA.MT_D_IM_DESC,media.mt_d_im_desc);
-        //模板下载word数量
-        values.put(MEDIA.MT_D_W_NUM,media.mt_d_w_num);
-        //模板下载word描述
-        values.put(MEDIA.MT_D_W_DESC,media.mt_d_w_desc);
-
-
-        //模板下载pdf数量
-        values.put(MEDIA.MT_D_P_NUM,media.mt_d_p_num);
-        //模板下载pdf描述
-        values.put(MEDIA.MT_D_P_DESC,media.mt_d_p_desc);
-        //模板下载excel数量
-        values.put(MEDIA.MT_D_E_NUM,media.mt_d_e_num);
-        //模板下载excel描述
-        values.put(MEDIA.MT_D_E_DESC,media.mt_d_e_desc);
         //模板备注
         values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
-
-
         //模板状态
         values.put(MEDIA.MT_STATUS,media.mt_status);
-
-
         long media_Id=db.insert(MEDIA.TABLE,null,values);
         db.close();
         Log.i(TAG,"media_Id="+media_Id);
@@ -86,9 +49,9 @@ public class MediaPro {
     }
 
 
-    public void delete(int media_Id){
+    public void delete(int media_no){
         SQLiteDatabase db= dbHelper.getWritableDatabase();
-        db.delete(MEDIA.TABLE,MEDIA.MT_ID+"=?", new String[]{String.valueOf(media_Id)});
+        db.delete(MEDIA.TABLE,MEDIA.MT_NO+"=?", new String[]{String.valueOf(media_no)});
         db.close();
     }
     public void update(MEDIA media){
@@ -97,49 +60,16 @@ public class MediaPro {
         ContentValues values=new ContentValues();
 
         //记录主键
-        values.put(MEDIA.MT_ID,media.mt_id);
+        values.put(MEDIA.MT_NO,media.mt_no);
         //模板名称
         values.put(MEDIA.MT_NAME,media.mt_name);
         //模板项目信息
         values.put(MEDIA.MT_ITEM_INFO,media.mt_item_info);
         //模板上传照片数量
-        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
+        values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
         //模板上传照片描述
-        values.put(MEDIA.MT_U_IM_DESC,media.mt_u_im_desc);
+        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
 
-
-        //模板上传word数量
-        values.put(MEDIA.MT_U_W_NUM,media.mt_u_w_num);
-        //模板上传word描述
-        values.put(MEDIA.MT_U_W_DESC,media.mt_u_w_desc);
-        //模板上传pdf数量
-        values.put(MEDIA.MT_U_P_NUM,media.mt_u_p_num);
-        //模板上传pdf描述
-        values.put(MEDIA.MT_U_P_DESC,media.mt_u_p_desc);
-        //模板上传excel数量
-        values.put(MEDIA.MT_U_E_NUM,media.mt_u_e_num);
-
-
-        //模板上传excel描述
-        values.put(MEDIA.MT_U_E_DESC,media.mt_u_e_desc);
-        //模板下载照片数量
-        values.put(MEDIA.MT_D_IM_NUM,media.mt_d_im_num);
-        //模板上下载传照片描述
-        values.put(MEDIA.MT_D_IM_DESC,media.mt_d_im_desc);
-        //模板下载word数量
-        values.put(MEDIA.MT_D_W_NUM,media.mt_d_w_num);
-        //模板下载word描述
-        values.put(MEDIA.MT_D_W_DESC,media.mt_d_w_desc);
-
-
-        //模板下载pdf数量
-        values.put(MEDIA.MT_D_P_NUM,media.mt_d_p_num);
-        //模板下载pdf描述
-        values.put(MEDIA.MT_D_P_DESC,media.mt_d_p_desc);
-        //模板下载excel数量
-        values.put(MEDIA.MT_D_E_NUM,media.mt_d_e_num);
-        //模板下载excel描述
-        values.put(MEDIA.MT_D_E_DESC,media.mt_d_e_desc);
         //模板备注
         values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
 
@@ -147,15 +77,148 @@ public class MediaPro {
         //模板状态
         values.put(MEDIA.MT_STATUS,media.mt_status);
 
-        db.update(MEDIA.TABLE,values,MEDIA.MT_ID+"=?",new String[] { String.valueOf(media.mt_id) });
+        db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
         db.close();
 
 
 
     }
-    //
-//    //查询该num编号的商品信息
-//    public  TASK SelectTask(String num){
+
+    public void addMediaGetDesc(MEDIA media){
+        Log.i(TAG,"update………………………………………………………………");
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        ContentValues values=new ContentValues();
+
+        //记录主键
+        values.put(MEDIA.MT_NO,media.mt_no);
+        //模板名称
+        values.put(MEDIA.MT_NAME,media.mt_name);
+        //模板项目信息
+        values.put(MEDIA.MT_ITEM_INFO,media.mt_item_info);
+        //模板上传照片数量
+        values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
+//        //模板上传照片数量
+//        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
+//        //模板上传照片描述
+//        values.put(MEDIA.MT_U_IM_DESC,media.mt_u_im_desc);
+//
+//
+//        //模板上传word数量
+//        values.put(MEDIA.MT_U_W_NUM,media.mt_u_w_num);
+//        //模板上传word描述
+//        values.put(MEDIA.MT_U_W_DESC,media.mt_u_w_desc);
+//        //模板上传pdf数量
+//        values.put(MEDIA.MT_U_P_NUM,media.mt_u_p_num);
+//        //模板上传pdf描述
+//        values.put(MEDIA.MT_U_P_DESC,media.mt_u_p_desc);
+//        //模板上传excel数量
+//        values.put(MEDIA.MT_U_E_NUM,media.mt_u_e_num);
+//
+//
+//        //模板上传excel描述
+//        values.put(MEDIA.MT_U_E_DESC,media.mt_u_e_desc);
+//        //模板下载照片数量
+//        values.put(MEDIA.MT_D_IM_NUM,media.mt_d_im_num);
+//        //模板上下载传照片描述
+//        values.put(MEDIA.MT_D_IM_DESC,media.mt_d_im_desc);
+//        //模板下载word数量
+//        values.put(MEDIA.MT_D_W_NUM,media.mt_d_w_num);
+//        //模板下载word描述
+//        values.put(MEDIA.MT_D_W_DESC,media.mt_d_w_desc);
+//
+//
+//        //模板下载pdf数量
+//        values.put(MEDIA.MT_D_P_NUM,media.mt_d_p_num);
+//        //模板下载pdf描述
+//        values.put(MEDIA.MT_D_P_DESC,media.mt_d_p_desc);
+//        //模板下载excel数量
+//        values.put(MEDIA.MT_D_E_NUM,media.mt_d_e_num);
+//        //模板下载excel描述
+//        values.put(MEDIA.MT_D_E_DESC,media.mt_d_e_desc);
+        //模板备注
+        values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
+
+
+        //模板状态
+        values.put(MEDIA.MT_STATUS,media.mt_status);
+
+        db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
+        db.close();
+
+
+
+    }
+
+    public void UpdateStatus(MEDIA media){
+        Log.i(TAG,"update………………………………………………………………");
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        ContentValues values=new ContentValues();
+
+        //记录主键
+        values.put(MEDIA.MT_NO,media.mt_no);
+        //模板名称
+        values.put(MEDIA.MT_NAME,media.mt_name);
+        //模板项目信息
+        values.put(MEDIA.MT_ITEM_INFO,media.mt_item_info);
+        //模板上传照片数量
+        values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
+//        //模板上传照片数量
+//        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
+//        //模板上传照片描述
+//        values.put(MEDIA.MT_U_IM_DESC,media.mt_u_im_desc);
+//
+//
+//        //模板上传word数量
+//        values.put(MEDIA.MT_U_W_NUM,media.mt_u_w_num);
+//        //模板上传word描述
+//        values.put(MEDIA.MT_U_W_DESC,media.mt_u_w_desc);
+//        //模板上传pdf数量
+//        values.put(MEDIA.MT_U_P_NUM,media.mt_u_p_num);
+//        //模板上传pdf描述
+//        values.put(MEDIA.MT_U_P_DESC,media.mt_u_p_desc);
+//        //模板上传excel数量
+//        values.put(MEDIA.MT_U_E_NUM,media.mt_u_e_num);
+//
+//
+//        //模板上传excel描述
+//        values.put(MEDIA.MT_U_E_DESC,media.mt_u_e_desc);
+//        //模板下载照片数量
+//        values.put(MEDIA.MT_D_IM_NUM,media.mt_d_im_num);
+//        //模板上下载传照片描述
+//        values.put(MEDIA.MT_D_IM_DESC,media.mt_d_im_desc);
+//        //模板下载word数量
+//        values.put(MEDIA.MT_D_W_NUM,media.mt_d_w_num);
+//        //模板下载word描述
+//        values.put(MEDIA.MT_D_W_DESC,media.mt_d_w_desc);
+//
+//
+//        //模板下载pdf数量
+//        values.put(MEDIA.MT_D_P_NUM,media.mt_d_p_num);
+//        //模板下载pdf描述
+//        values.put(MEDIA.MT_D_P_DESC,media.mt_d_p_desc);
+//        //模板下载excel数量
+//        values.put(MEDIA.MT_D_E_NUM,media.mt_d_e_num);
+//        //模板下载excel描述
+//        values.put(MEDIA.MT_D_E_DESC,media.mt_d_e_desc);
+        //模板备注
+        values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
+
+
+        //模板状态
+        values.put(MEDIA.MT_STATUS,media.mt_status);
+
+        db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
+        db.close();
+
+
+
+    }
+    //查询该num编号的文件下载信息
+//    public ServerBean.Media getMedialistDown(String num){
 //        SQLiteDatabase db= dbHelper.getReadableDatabase();
 //
 //
@@ -209,18 +272,18 @@ public class MediaPro {
 //        db.close();
 //        return goods;
 //    }
-//
-//
-    //查询goods表id
-    public boolean getID(String ID){
+
+
+    //查询MT表id
+    public boolean getID(String NO){
         boolean rel = false;
 
         SQLiteDatabase db= dbHelper.getReadableDatabase();
         String selectQuery="SELECT "+
-                MEDIA.MT_ID+
+                MEDIA.MT_NO+
 
                 " FROM "+MEDIA.TABLE +
-                "  WHERE " + MEDIA.MT_ID + " = '" + ID + "'"+" LIMIT 1";
+                "  WHERE " + MEDIA.MT_NO + " = '" + NO + "'"+" LIMIT 1";
 
 
         System.out.println(selectQuery);

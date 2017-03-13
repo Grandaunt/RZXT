@@ -68,7 +68,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 +TASK.TASK_ITEM_INFO+" TEXT, "
 
                 +TASK.TASK_MT_ID+" TEXT, "
-                +TASK.TASK_NOTE+ " TEXT)";
+                +TASK.TASK_NOTE+" TEXT, "
+                +TASK.APPLY_ID+ " TEXT)";
         db.execSQL(CREATE_TABLE_EVENT);
 
         Log.i("DBHelper","EVENT表创建");
@@ -76,29 +77,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
         String CREATE_TABLE_MEDIA="CREATE TABLE "+ MEDIA.TABLE+"("
-                +MEDIA.MT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                +MEDIA.MT_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +MEDIA.MT_NO+" TEXT,"
                 +MEDIA.MT_NAME+" TEXT, "
                 +MEDIA.MT_ITEM_INFO+" TEXT, "
-                +MEDIA.MT_U_IM_NUM+" TEXT, "
-                +MEDIA.MT_U_IM_DESC+" TEXT, "
-
-
-                +MEDIA.MT_U_W_NUM+" TEXT, "
-                +MEDIA.MT_U_W_DESC+" TEXT, "
-                +MEDIA.MT_U_P_NUM+" TEXT, "
-                +MEDIA.MT_U_P_DESC+" TEXT, "
-                +MEDIA.MT_U_E_NUM+" TEXT, "
-
-                +MEDIA.MT_U_E_DESC+" TEXT, "
-                +MEDIA.MT_D_IM_NUM+" TEXT, "
-                +MEDIA.MT_D_IM_DESC+" TEXT, "
-                +MEDIA.MT_D_W_NUM+" TEXT, "
-                +MEDIA.MT_D_W_DESC+" TEXT, "
-
-                +MEDIA.MT_D_P_NUM+" TEXT, "
-                +MEDIA.MT_D_P_DESC+" TEXT, "
-                +MEDIA.MT_D_E_NUM+" TEXT, "
-                +MEDIA.MT_D_E_DESC+" TEXT, "
+                +MEDIA.MT_U_DESC+" TEXT, "
+                +MEDIA.MT_D_DESC+" TEXT, "
                 +MEDIA.MT_IS_NOTE+" TEXT, "
                 +MEDIA.MT_STATUS+" TEXT)";
         db.execSQL(CREATE_TABLE_MEDIA);
