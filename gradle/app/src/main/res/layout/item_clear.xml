@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="6dp"
+>
+    <CheckBox
+        android:id="@+id/cb_multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:button="@drawable/selector_checkbox_multi"
+        android:checked="false"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
+    <include
+        layout="@layout/item_main_over"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
