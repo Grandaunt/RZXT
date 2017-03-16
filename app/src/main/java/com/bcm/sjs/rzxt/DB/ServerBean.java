@@ -594,13 +594,7 @@ public class ServerBean {
         //模板项目信息
         private String MT_ITEM_INFO;
 
-        public String getMT_U_DESC() {
-            return MT_U_DESC;
-        }
 
-        public void setMT_U_DESC(String MT_U_DESC) {
-            this.MT_U_DESC = MT_U_DESC;
-        }
 
         public String getMT_D_DESC() {
             return MT_D_DESC;
@@ -610,8 +604,36 @@ public class ServerBean {
             this.MT_D_DESC = MT_D_DESC;
         }
 
+//        public String getMT_U_7_DESC() {
+//            return MT_U_7_DESC;
+//        }
+//
+//        public void setMT_U_7_DESC(String MT_U_7_DESC) {
+//            this.MT_U_7_DESC = MT_U_7_DESC;
+//        }
+//
+//        public String getMT_U_9_DESC() {
+//            return MT_U_9_DESC;
+//        }
+//
+//        public void setMT_U_9_DESC(String MT_U_9_DESC) {
+//            this.MT_U_9_DESC = MT_U_9_DESC;
+//        }
+//
+//        public String getMT_U_8_DESC() {
+//            return MT_U_8_DESC;
+//        }
+//
+//        public void setMT_U_8_DESC(String MT_U_8_DESC) {
+//            this.MT_U_8_DESC = MT_U_8_DESC;
+//        }
+
         //模板上传照片数量
-        private String MT_U_DESC;
+//        private String MT_U_7_DESC;
+//        //模板上传照片数量
+//        private String MT_U_8_DESC;
+//        //模板上传照片数量
+//        private String MT_U_9_DESC;
         //模板上传照片描述
         private String MT_D_DESC;
         //模板上传word数量
@@ -667,11 +689,13 @@ public class ServerBean {
 
         @Override
         public String toString() {
-            return "Media{" +
+            return "MediaBean{" +
                     "MT_ID='" + MT_ID + '\'' +
                     ", MT_NAME='" + MT_NAME + '\'' +
                     ", MT_ITEM_INFO='" + MT_ITEM_INFO + '\'' +
-                    ", MT_U_DESC='" + MT_U_DESC + '\'' +
+//                    ", MT_U_7_DESC='" + MT_U_7_DESC + '\'' +
+//                    ", MT_U_8_DESC='" + MT_U_8_DESC + '\'' +
+//                    ", MT_U_9_DESC='" + MT_U_9_DESC + '\'' +
                     ", MT_D_DESC='" + MT_D_DESC + '\'' +
                     ", MT_IS_NOTE='" + MT_IS_NOTE + '\'' +
                     ", MT_STATUS='" + MT_STATUS + '\'' +

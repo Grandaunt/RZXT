@@ -68,10 +68,10 @@ public class ContactAdapter extends BaseAdapter {
 			/***
 			 *
 			 */
-			holder.tv_ln_cif_name = (TextView)convertView.findViewById(R.id.item_company_name_2);
-			holder.tv_ln_task_no = (TextView)convertView.findViewById(R.id.item_company_no_2);
-			holder.tv_ln_task_status = (TextView)convertView.findViewById(R.id.item_audit_ruf_2);
-			holder.tv_ln_task_time_limit = (TextView)convertView.findViewById(R.id.item_date_2);
+			holder.tv_ln_com_name = (TextView)convertView.findViewById(R.id.item_tv_clear_com_name);
+			holder.tv_ln_com_no = (TextView)convertView.findViewById(R.id.item_tv_clear_com_no);
+			holder.tv_ln_task_status = (TextView)convertView.findViewById(R.id.item_tv_clear_task_status);
+			holder.tv_ln_task_time_limit = (TextView)convertView.findViewById(R.id.item_tv_clear_end_date);
 //			holder.tv_ln_task_type = (TextView)convertView.findViewById(R.id.tv_ln_task_type);
 			convertView.setTag(holder);
 		}else{
@@ -81,9 +81,9 @@ public class ContactAdapter extends BaseAdapter {
 		holder.cbContactMulti.setVisibility(isCheckBoxVisiable);
 
 		String ln_cif_name = ContactLists.get(position).task_com_name;
-		holder.tv_ln_cif_name.setText(ln_cif_name);
-		String ln_task_no = ContactLists.get(position).task_no;
-		holder.tv_ln_task_no.setText(ln_task_no);
+		holder.tv_ln_com_name.setText(ln_cif_name);
+		String ln_com_no = ContactLists.get(position).task_com_no;
+		holder.tv_ln_com_no.setText(ln_com_no);
 		String ln_task_status = ContactLists.get(position).task_status;
 		holder.tv_ln_task_status.setText(ln_task_status);
 		String ln_task_time_limit = ContactLists.get(position).task_end_date;
@@ -102,7 +102,8 @@ public class ContactAdapter extends BaseAdapter {
 		CheckBox cbContactMulti;
 		TextView tv_ln_task_type;
 		TextView tv_ln_task_no;
-		TextView tv_ln_cif_name;
+		TextView tv_ln_com_no;
+		TextView tv_ln_com_name;
 		TextView tv_ln_task_time_limit;
 		TextView tv_ln_task_status;
 	}

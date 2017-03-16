@@ -36,7 +36,12 @@ public class MediaPro {
         //模板上传照片数量
         values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
         //模板上传照片描述
-        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
+        values.put(MEDIA.MT_U_7_DESC,"7@0.jpg");
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_8_DESC,"8@0.jpg");
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_9_DESC,"9@0.jpg");
+
 
         //模板备注
         values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
@@ -67,8 +72,12 @@ public class MediaPro {
         values.put(MEDIA.MT_ITEM_INFO,media.mt_item_info);
         //模板上传照片数量
         values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
-        //模板上传照片描述
-        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
+//        //模板上传照片描述
+//        values.put(MEDIA.MT_U_7_DESC,media.mt_u_7_desc);
+//        //模板上传照片描述
+//        values.put(MEDIA.MT_U_8_DESC,media.mt_u_8_desc);
+//        //模板上传照片描述
+//        values.put(MEDIA.MT_U_9_DESC,media.mt_u_9_desc);
 
         //模板备注
         values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
@@ -79,8 +88,6 @@ public class MediaPro {
 
         db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
         db.close();
-
-
 
     }
 
@@ -98,45 +105,12 @@ public class MediaPro {
         //模板上传照片数量
         values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
         //模板上传照片描述
-        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
-//        //模板上传照片数量
-//        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
-//        //模板上传照片描述
-//        values.put(MEDIA.MT_U_IM_DESC,media.mt_u_im_desc);
-//
-//
-//        //模板上传word数量
-//        values.put(MEDIA.MT_U_W_NUM,media.mt_u_w_num);
-//        //模板上传word描述
-//        values.put(MEDIA.MT_U_W_DESC,media.mt_u_w_desc);
-//        //模板上传pdf数量
-//        values.put(MEDIA.MT_U_P_NUM,media.mt_u_p_num);
-//        //模板上传pdf描述
-//        values.put(MEDIA.MT_U_P_DESC,media.mt_u_p_desc);
-//        //模板上传excel数量
-//        values.put(MEDIA.MT_U_E_NUM,media.mt_u_e_num);
-//
-//
-//        //模板上传excel描述
-//        values.put(MEDIA.MT_U_E_DESC,media.mt_u_e_desc);
-//        //模板下载照片数量
-//        values.put(MEDIA.MT_D_IM_NUM,media.mt_d_im_num);
-//        //模板上下载传照片描述
-//        values.put(MEDIA.MT_D_IM_DESC,media.mt_d_im_desc);
-//        //模板下载word数量
-//        values.put(MEDIA.MT_D_W_NUM,media.mt_d_w_num);
-//        //模板下载word描述
-//        values.put(MEDIA.MT_D_W_DESC,media.mt_d_w_desc);
-//
-//
-//        //模板下载pdf数量
-//        values.put(MEDIA.MT_D_P_NUM,media.mt_d_p_num);
-//        //模板下载pdf描述
-//        values.put(MEDIA.MT_D_P_DESC,media.mt_d_p_desc);
-//        //模板下载excel数量
-//        values.put(MEDIA.MT_D_E_NUM,media.mt_d_e_num);
-//        //模板下载excel描述
-//        values.put(MEDIA.MT_D_E_DESC,media.mt_d_e_desc);
+        values.put(MEDIA.MT_U_7_DESC,media.mt_u_7_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_8_DESC,media.mt_u_8_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_9_DESC,media.mt_u_9_desc);
+
         //模板备注
         values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
 
@@ -147,12 +121,39 @@ public class MediaPro {
         db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
         db.close();
 
-
-
     }
+//    public void addMediaGetDesc(String mt_no,String mPhotoname,String type){
+//        Log.i(TAG,"addMediaGetDesc………………………………………………………………");
+//        SQLiteDatabase db= dbHelper.getWritableDatabase();
+//        ContentValues values=new ContentValues();
+//        //记录主键
+//        values.put(MEDIA.MT_NO,mt_no);
+//        if(type.equals("7")){
+//            values.put(MEDIA.MT_U_7_DESC,seledesc(mt_no,type)+"%"+type+"@"+mPhotoname);
+////            mMedialist.mt_u_7_desc=mMedialist.mt_u_7_desc;
+////            Log.i(TAG,"mt_u_7_desc="+desc);
+//            }
+//        else     if(type.equals("8")){
+//            values.put(MEDIA.MT_U_8_DESC,seledesc(mt_no,type)+"%"+type+"@"+mPhotoname);
+//            Log.i(TAG,"mt_u_8_desc="+seledesc(mt_no,type)+"%"+type+"@"+mPhotoname);
+//        }
+//        else     if(type.equals("9")){
+//            values.put(MEDIA.MT_U_9_DESC,seledesc(mt_no,type)+"%"+type+"@"+mPhotoname);
+//            Log.i(TAG,"mt_u_9_desc="+seledesc(mt_no,type)+"%"+type+"@"+mPhotoname);
+//        }
+////        模板备注
+//        values.put(MEDIA.MT_IS_NOTE,media.mt_is_note);
+//
+//
+//        //模板状态
+//        values.put(MEDIA.MT_STATUS,media.mt_status);
+//
+//        db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { mt_no});
+//        db.close();
+//    }
 
-    public void UpdateStatus(MEDIA media){
-        Log.i(TAG,"update………………………………………………………………");
+    public String UpdateStatus(MEDIA media){
+        Log.i(TAG,"UpdateStatus………………………………………………………………");
         SQLiteDatabase db= dbHelper.getWritableDatabase();
         ContentValues values=new ContentValues();
 
@@ -165,7 +166,11 @@ public class MediaPro {
         //模板上传照片数量
         values.put(MEDIA.MT_D_DESC,media.mt_d_desc);
         //模板上传照片描述
-        values.put(MEDIA.MT_U_DESC,media.mt_u_desc);
+        values.put(MEDIA.MT_U_7_DESC,media.mt_u_7_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_8_DESC,media.mt_u_8_desc);
+        //模板上传照片描述
+        values.put(MEDIA.MT_U_9_DESC,media.mt_u_9_desc);
 //        //模板上传照片数量
 //        values.put(MEDIA.MT_U_IM_NUM,media.mt_u_im_num);
 //        //模板上传照片描述
@@ -213,65 +218,46 @@ public class MediaPro {
 
         db.update(MEDIA.TABLE,values,MEDIA.MT_NO+"=?",new String[] { String.valueOf(media.mt_no) });
         db.close();
-
+         return media.mt_status;
 
 
     }
-    //查询该num编号的文件下载信息
-//    public ServerBean.Media getMedialistDown(String num){
-//        SQLiteDatabase db= dbHelper.getReadableDatabase();
-//
-//
-//        String selectQuery="SELECT "
-//                +TASK.ID+","
-//                +Goods.GoodsNum+","
-//                +Goods.GoodsName+","
-//                +Goods.GoodsPrice+","
-//                +Goods.GooodsInfo+","
-//
-//                +Goods.GoodsImage+","
-//                +Goods.GoodsType+","
-//                +Goods.GoodsStatus+","
-//                +Goods.GoodsNumber+","
-//                +Goods.GoodsCost+","
-//
-//                +Goods.GoodsTemperature+","
-//                +Goods.GoodsLight+","
-//                +Goods.GoodsLife+
-//                " FROM "+Goods.TABLE
-//                + " WHERE " +
-//                Goods.GoodsNum + "=?";
-//        int iCount=0;
-//        Goods goods=new Goods();
-//
-//
-//        Cursor cursor=db.rawQuery(selectQuery,new String[]{String.valueOf(num)});
-//        if(cursor.moveToFirst()){
-//            do{
-//
-//                goods.goodsId = cursor.getString(cursor.getColumnIndex(Goods.GoodsId));
-//                goods.goodsNum = cursor.getString(cursor.getColumnIndex(Goods.GoodsNum));
-//                goods.goodsName = cursor.getString(cursor.getColumnIndex(Goods.GoodsName));
-//                goods.goodsPrice = cursor.getString(cursor.getColumnIndex(Goods.GoodsPrice));
-//                goods.gooodsInfo = cursor.getString(cursor.getColumnIndex(Goods.GooodsInfo));
-//
-//                goods.goodsImage = cursor.getString(cursor.getColumnIndex(Goods.GoodsImage));
-//                goods.goodsType = cursor.getString(cursor.getColumnIndex(Goods.GoodsType));
-//                goods.goodsStatus = cursor.getString(cursor.getColumnIndex(Goods.GoodsStatus));
-//                goods.goodsNumber = cursor.getString(cursor.getColumnIndex(Goods.GoodsNumber));
-//                goods.goodsCost = cursor.getString(cursor.getColumnIndex(Goods.GoodsCost));
-//
-//                goods.goodsTemperature = cursor.getString(cursor.getColumnIndex(Goods.GoodsTemperature));
-//                goods.goodsLight = cursor.getString(cursor.getColumnIndex(Goods.GoodsLight));
-//                goods.goodsLife = cursor.getString(cursor.getColumnIndex(Goods.GoodsLife));
-//
-//
-//            }while(cursor.moveToNext());
-//        }
-//        cursor.close();
-//        db.close();
-//        return goods;
-//    }
+    //查询该no编号该type类型下的描述信息
+    public String seledesc(String no,String type){
+        SQLiteDatabase db= dbHelper.getReadableDatabase();
+        String desc = "";
+
+        String selectQuery="SELECT "
+                +MEDIA.MT_NO+","
+                +MEDIA.MT_U_7_DESC+","
+                +MEDIA.MT_U_7_DESC+","
+                +MEDIA.MT_U_7_DESC+
+                " FROM "+MEDIA.TABLE
+                + " WHERE " +
+                MEDIA.MT_NO + "=?";
+        int iCount=0;
+        Cursor cursor=db.rawQuery(selectQuery,new String[]{String.valueOf(no)});
+        if(cursor.moveToFirst()){
+            do{
+                if(type.equals("7")){
+                    desc=cursor.getString(cursor.getColumnIndex(MEDIA.MT_U_7_DESC));
+                }
+                else    if(type.equals("8")){
+                    desc=cursor.getString(cursor.getColumnIndex(MEDIA.MT_U_8_DESC));
+                }
+                else    if(type.equals("9")){
+                    desc=cursor.getString(cursor.getColumnIndex(MEDIA.MT_U_9_DESC));
+                }
+
+
+
+
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return desc;
+    }
 
 
     //查询MT表id

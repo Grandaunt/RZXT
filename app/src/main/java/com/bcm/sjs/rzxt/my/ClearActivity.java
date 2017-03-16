@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -47,9 +48,10 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
     private TextView tvChooseAll;			//全选
     private TextView tvChooseDeletel;		//删除所选项
     private EditText etOverEvent;
-    private ImageButton sreachBtn,backBtn;
+    private Button sreachBtn;
+    private ImageButton backBtn;
     private  ArrayList<HashMap<String, String>> taskList;
-    private String userAccount = "";//信贷员
+    private String userAcc = "";//信贷员
     private int task_status=3;//任务状态
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
         tvMultiChoose.setOnClickListener(this);
         tvMultiChooseCancel.setOnClickListener(this);
         etOverEvent = (EditText)findViewById(R.id.etOverEvent);
-        sreachBtn = (ImageButton)findViewById(R.id.btn_sreach_over_event);
+        sreachBtn = (Button)findViewById(R.id.btn_sreach_over_event);
         sreachBtn.setOnClickListener(this);
         backBtn = (ImageButton)findViewById(R.id.im_back);
         backBtn.setOnClickListener(this);
@@ -86,7 +88,7 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
                 //查询任务状态
 //                EventRepo repo = new EventRepo(ManageCacheActivity.this);
                 TaskPro repo = new TaskPro(ClearActivity.this);
-                taskList = repo.showStatusList("3",userAccount);
+                taskList = repo.showStatusList(3,userAcc);
                 Log.i(TAG,"taskList.get(0).get(task_status)="+taskList.get(0).get("task_status"));
 //                ListAdapter adapter = new SimpleAdapter(ClearActivity.this, taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_addr","task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_address_2,R.id.item_audit_ruf_2, R.id.item_date_2});
 //                setListAdapter(adapter);
@@ -140,10 +142,10 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
     private void initView(){
         //获取信贷员id
         SharedPreferences sharedPrefs = getSharedPreferences("RZShare", Context.MODE_PRIVATE);
-        String userAcc = sharedPrefs.getString("USER_ACCOUNT", "null");
+         userAcc = sharedPrefs.getString("USER_ACCOUNT", "null");
         TaskPro repo = new TaskPro(ClearActivity.this);
 
-        contacts = repo.managerTask(userAcc,3);
+        contacts = repo.getManageCache(userAcc,3);
         adapter = new ContactAdapter(this, contacts, false);
         lv.setAdapter(adapter);
 
@@ -166,7 +168,7 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
                 }
                 else {
                     contacts.clear();
-                    contacts  = repo.getSreachManageCache(overEventinfo,userAccount,task_status);
+                    contacts  = repo.getSreachManageCache(overEventinfo,userAcc);
 
                     /**
                      * 第三个参数表示是否显示checkbox
@@ -229,8 +231,8 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
                     TaskPro repo1 = new TaskPro(ClearActivity.this);
                     repo1.delete(c.task_no);
                     //删除文件夹
-                    Log.i(TAG,"/RZXT/" + userAccount + "/" + c.task_no);
-                    String fileName = Environment.getExternalStorageDirectory()+"/RZXT/" + userAccount + "/" + c.task_no;
+                    Log.i(TAG,"/RZXT/" + userAcc + "/" + c.task_no);
+                    String fileName = Environment.getExternalStorageDirectory()+"/RZXT/" + userAcc + "/" + c.task_no;
                     File file = new File(fileName);
                     FileUtils.delFile(file);
 
@@ -258,14 +260,15 @@ public class ClearActivity extends Activity implements View.OnClickListener  {
     @Override
     protected void onResume() {
 
-        super.onResume();
         TaskPro repo = new TaskPro(ClearActivity.this);
-        contacts = repo.managerTask(userAccount,task_status);
+        contacts = repo.getManageCache(userAcc,task_status);
         /**
          * 第三个参数表示是否显示checkbox
          */
         adapter = new ContactAdapter(this, contacts, false);
         lv.setAdapter(adapter);
+        super.onResume();
+
     }
 
 

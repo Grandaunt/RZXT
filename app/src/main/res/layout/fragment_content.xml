@@ -28,8 +28,8 @@
     android:orientation="horizontal"
     android:background="@color/white">
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="0.9"
         android:orientation="horizontal"
         android:background="@color/white">
@@ -39,10 +39,13 @@
             android:src="@mipmap/ic_search"
             android:background="@color/white"/>
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:id="@+id/et_sreach_task_info"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
             android:layout_weight="0.8"
             android:layout_margin="5dp"
+            android:textSize="16dp"
+            android:padding="4dp"
             android:background="@color/windowBackground"
             />
     </LinearLayout>
@@ -50,7 +53,7 @@
         android:id="@+id/btn_sreach"
         android:layout_width="60dp"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/touch_sreach_bg"
         android:textSize="12dp"
         android:text="@string/sreach"/>
     </LinearLayout>

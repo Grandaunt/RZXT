@@ -26,6 +26,7 @@
     <color name="Gray">#ccc</color>
     <color name="light_blue">#bbeeff</color>
     <color name="drak_blue">#1188ff</color>
+    <color name="drak_red">#ee0033</color>
 
     <color name="main_bottom_text_normal">#aa847d7b</color>
     <color name="main_botton_text_select">#1492ff</color>
@@ -34,3 +35,4 @@
     <color name="essence_tab_text_color_normal">#ff847d7b</color>
     <color name="essence_tab_text_color_press">#1492ff</color>
 </resources>
+

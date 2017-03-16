@@ -45,10 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"/>
     <include
-    layout="@layout/layout_info_1get"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
+        layout="@layout/layout_info_1get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
     <include
         layout="@layout/layout_info_2get"
         android:layout_width="match_parent"
@@ -78,8 +78,9 @@
         android:text="@string/save"
         android:paddingLeft="100dp"
         android:paddingRight="100dp"
+        android:textSize="12dp"
         android:textColor="@color/textColorWhite"
-        android:background="@mipmap/save_bg"
+        android:background="@drawable/touch_uploadbtn_bg"
         />
         </LinearLayout>
     </LinearLayout>

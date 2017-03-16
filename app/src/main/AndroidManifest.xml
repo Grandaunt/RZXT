@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoadingActivity"
             android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,11 +34,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <!--<activity android:name=".MainActivity"  android:windowSoftInputMode="adjustPan|stateHidden"/>-->
-        <activity android:name=".LoadingActivity" />
+         <activity android:name=".MainActivity"  android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <!--<activity android:name=".LoadingActivity" />-->
         <activity android:name=".LoginActivity" />
         <activity android:name=".my.MemoActivity" />
-        <activity android:name=".my.ClearActivity" />
+        <activity android:name=".my.ClearActivity" android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".my.SettingActivity" />
         <!-- <activity android:name=".my.AppUpadteUtil" /> -->
         <activity android:name=".my.AboutActivity" />

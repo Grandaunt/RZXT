@@ -21,7 +21,11 @@ public class MEDIA {
     //模板上传照片数量
     public static final String MT_D_DESC="mt_d_desc";
     //模板上传照片描述
-    public static final String MT_U_DESC="mt_u_desc";
+    public static final String MT_U_7_DESC="mt_u_7_desc";
+    //模板上传照片描述
+    public static final String MT_U_8_DESC="mt_u_8_desc";
+    //模板上传照片描述
+    public static final String MT_U_9_DESC="mt_u_9_desc";
 
 //
 //    //模板上传word数量
@@ -79,7 +83,11 @@ public class MEDIA {
     //模板上传照片数量
     public String mt_d_desc;
     //模板上传照片描述
-    public String mt_u_desc;
+    public String mt_u_7_desc;
+    //模板上传照片描述
+    public String mt_u_8_desc;
+    //模板上传照片描述
+    public String mt_u_9_desc;
 
 
 //    //模板上传照片数量

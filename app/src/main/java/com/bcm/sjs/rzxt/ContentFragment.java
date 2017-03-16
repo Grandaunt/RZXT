@@ -61,8 +61,8 @@ public class ContentFragment extends ListFragment {
     private SharedPreferences sharedPrefs;
     private String userAcc;
     private String URL;
-//    private Button btn_sreach;
-//    private EditText et_sreach;
+    private Button btn_sreach;
+    private EditText et_sreach;
     public int getPosition() {
         return position;
     }
@@ -91,7 +91,7 @@ public class ContentFragment extends ListFragment {
         x.view().inject(getActivity());
          sharedPrefs = getActivity().getSharedPreferences("RZShare", Context.MODE_PRIVATE);
         //布局文件中只有一个居中的TextView
-        if(viewContent == null) {
+//        if(viewContent == null) {
             viewContent = inflater.inflate(R.layout.fragment_content, container, false);
             viewItem = inflater.inflate(R.layout.item_main_over, container, false);
             pullRefresh();
@@ -100,40 +100,47 @@ public class ContentFragment extends ListFragment {
             tv_status=(TextView)viewItem.findViewById(R.id.item_audit_ruf_2);
             TaskPro repo = new TaskPro(getActivity());
             Log.i(TAG, "getPosition()=" + getPosition());
-            if(this.position==0) {
-                taskList = repo.showStatusList(this.position+"",userAcc);
-                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
-                setListAdapter(adapter);
+            taskList = repo.showStatusList(getPosition(), userAcc);
+            if(getPosition()==0) {
+                if(taskList.size()>0) {
+                    ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
+                    setListAdapter(adapter);
+                }
             }
-           else{
-                taskList = repo.showStatusList(this.position+"", userAcc);
-                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no","task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2,R.id.item_audit_ruf_2, R.id.item_date_2});
-                setListAdapter(adapter);
-
-//                if(taskList.get(0).get("task_status").equals("正在审核")){
-//                    tv_status.setTextColor(this.getResources().getColor(R.color.Orange));
-//
-//                }else if(taskList.get(0).get("task_status").equals("审核通过")){
-//                    tv_status.setTextColor(this.getResources().getColor(R.color.Green));
-//                }
-//
-//                else if(taskList.get(0).get("task_status").equals("审核失败")){
-//                    tv_status.setTextColor(this.getResources().getColor(R.color.Red));
-//                }
-//
-//                else if(taskList.get(0).get("task_status").equals("任务失效")){
-//                    tv_status.setTextColor(this.getResources().getColor(R.color.Gray));
-//                }
+            else{
+                if(taskList.size()>0) {
+                    ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
+                    setListAdapter(adapter);
+                }
             }
-        }
-//        btn_sreach = (Button)viewContent.findViewById(R.id.btn_sreach);
-//        btn_sreach.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//               TaskPro repo = new TaskPro(getActivity());
-//                repo.getSreachManageCache(x,userAccount,task_status);
-//            }
-//        });
+        /***
+         * 搜索
+         */
+//        position=this.position;
+        et_sreach = (EditText)viewContent.findViewById(R.id.et_sreach_task_info);
+        btn_sreach = (Button)viewContent.findViewById(R.id.btn_sreach);
+        btn_sreach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String  info = et_sreach.getText().toString();
+                TaskPro repo = new TaskPro(getActivity());
+                taskList = repo.showSreach(info,getPosition(), userAcc);
+                if(getPosition()==0) {
+                    if(taskList.size()>0) {
+//                    Log.i(TAG,"item_main_content"+taskList.get(0).get("task_status"));
+                        ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
+                        setListAdapter(adapter);
+                    }
+                }
+                else{
+                    if(taskList.size()>0) {
+//                    Log.i(TAG,"item_main_over"+taskList.get(0).get("task_status"));
+                        ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
+                        setListAdapter(adapter);
+                    }
+                }
+            }
+        });
         return viewContent;
     }
 
@@ -207,63 +214,22 @@ public class ContentFragment extends ListFragment {
                     public void run() {
                         UpdateHttp();
                         TaskPro repo = new TaskPro(getActivity());
-                        /***
-                         * 0：待处理
-                         1：待上传
-                         2：已上传，正在审核
-                         3：审核通过
-                         4：审核失败
-                         5：任务失效
-                         */
+                        taskList = repo.showStatusList(getPosition(), userAcc);
                         if(getPosition()==0) {
-                            taskList = repo.showStatusList(getPosition()+"", userAcc);
-
-                            if (taskList.get(0).get("task_status").equals("0")){
-                                taskList.get(0).put("task_status","待处理");
+                            if(taskList.size()>0) {
+                                Log.i(TAG, "item_main_content" + taskList.get(0).get("task_status"));
+                                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
+                                setListAdapter(adapter);
                             }
-                            else if (taskList.get(0).get("task_status").equals("2")){
-                                taskList.get(0).put("task_status","正在审核");
-                            }
-                            if (taskList.get(0).get("task_status").equals("3")){
-                                taskList.get(0).put("task_status","审核通过");
-                            }
-                            if (taskList.get(0).get("task_status").equals("4")){
-                                taskList.get(0).put("task_status","审核失败");
-                            }
-                            if (taskList.get(0).get("task_status").equals("5")){
-                                taskList.get(0).put("task_status","任务失效");
-                            }
-                            ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
-                            setListAdapter(adapter);
                         }
                         else{
-                            taskList = repo.showStatusList(getPosition()+"", userAcc);
-//                            if(taskList.get(0).get("task_status").equals("正在审核")){
-//                                tv_status.setTextColor(0xff9900);
-//
-//                            }else if(taskList.get(0).get("task_status").equals("审核通过")){
-//                                tv_status.setTextColor(0x00ff22);
-//                            }
-//
-//                            else if(taskList.get(0).get("task_status").equals("审核失败")){
-//                                tv_status.setTextColor(0xff4422);
-//                            }
-//
-//                            else if(taskList.get(0).get("task_status").equals("任务失效")){
-//                                tv_status.setTextColor(0xccc);
-//                            }
-                            ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no","task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2,R.id.item_audit_ruf_2, R.id.item_date_2});
-                            setListAdapter(adapter);
+                            if(taskList.size()>0) {
+                                Log.i(TAG, "item_main_over" + taskList.get(0).get("task_status"));
+                                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
+                                setListAdapter(adapter);
+                            }
 
                         }
-//                        TaskPro repo = new TaskPro(getActivity());
-//                        position = getPosition();
-//                        if(getPosition().equals("")){
-//                            position="0";
-//                        }
-//                        ArrayList<HashMap<String, String>> taskList = repo.showStatusList(position);
-//                        ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"item_company_name", "item_company_address", "item_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
-//                        setListAdapter(adapter);
                         mPtrFrame.refreshComplete();
                         //mPtrFrame.autoRefresh();//自动刷新
                     }
@@ -289,12 +255,9 @@ public class ContentFragment extends ListFragment {
 
     private void UpdateHttp(){
         //显示用户名
-
         String AUTH_TOKEN = sharedPrefs.getString("AUTH_TOKEN", "0");
-
         RequestParams params = new RequestParams(URL+"/MVNFHM/appInterface/appUpdateInfo");
         params.addParameter("AUTH_TOKEN", AUTH_TOKEN);
-
         Log.i("LoginActivity_post", "params："+params);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -312,8 +275,9 @@ public class ContentFragment extends ListFragment {
 
                     ServerBean.User user = serverBean.getUser();
                     List<ServerBean.TaskBean> taskbeanList = serverBean.getTaskList();
-//                    ServerBean.Media jsonmedia = serverBean.getMedia();
+                    List<ServerBean.MediaBean> mediabeanList = serverBean.getFileList();
                     Log.i(TAG,"taskbeanList.size()="+taskbeanList.size());
+                    Log.i(TAG,"mediabeanList.size()="+mediabeanList.size());
                     if (taskbeanList.size() > 0) {
                         for (int i = 0; i < taskbeanList.size(); i++) {
 
@@ -399,7 +363,8 @@ public class ContentFragment extends ListFragment {
                             task.task_mt_id = bean.getTASK_MT_ID();
                             //任务备注
                             task.task_note = bean.getTASK_NOTE();
-
+                            //申请号
+                            task.apply_id = bean.getAPPLY_ID();
                             TaskPro repo = new TaskPro(getActivity());
                             if (repo.getNo(bean.getTASK_NO())) {
                                 repo.update(task);
@@ -409,102 +374,67 @@ public class ContentFragment extends ListFragment {
                                 Log.i(TAG, "task表插入:" + bean.getTASK_NO());
                             }
                         }
-
-//                        MEDIA media = new MEDIA();
-//                        //记录主键
-//                        media.mt_id = jsonmedia.getMT_ID();
-//                        //模板名称
-//                        media.mt_name = jsonmedia.getMT_NAME();
-//                        //模板项目信息
-//                        media.mt_item_info = jsonmedia.getMT_ITEM_INFO();
-//                        //                        //模板上传照片数量
-//                        media.mt_u_desc = jsonmedia.getMT_U_DESC();
-//                        //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
-//                        media.mt_d_desc = jsonmedia.getMT_D_DESC();
-//
-////                        //模板上传照片数量
-////                        media.mt_u_im_num = jsonmedia.getMT_U_IM_NUM();
-////                        //模板上传照片描述
-////                        media.mt_u_im_desc = jsonmedia.getMT_U_IM_DESC();
-////
-////
-////                        //模板上传word数量
-////                        media.mt_u_w_num = jsonmedia.getMT_U_W_NUM();
-////                        //模板上传word描述
-////                        media.mt_u_w_desc = jsonmedia.getMT_U_W_DESC();
-////                        //模板上传pdf数量
-////                        media.mt_u_p_num = jsonmedia.getMT_U_P_NUM();
-////                        //模板上传pdf描述
-////                        media.mt_u_p_desc = jsonmedia.getMT_U_P_DESC();
-////                        //模板上传excel数量
-////                        media.mt_u_e_num = jsonmedia.getMT_U_E_NUM();
-////
-////
-////                        //模板上传excel描述
-////                        media.mt_u_e_desc = jsonmedia.getMT_U_E_DESC();
-////                        //模板下载照片数量
-////                        media.mt_d_im_num = jsonmedia.getMT_D_IM_NUM();
-////                        //模板上下载传照片描述
-////                        media.mt_d_im_desc = jsonmedia.getMT_D_IM_DESC();
-////                        //模板下载word数量
-////                        media.mt_d_w_num = jsonmedia.getMT_D_W_NUM();
-////                        //模板下载word描述
-////                        media.mt_d_w_desc = jsonmedia.getMT_D_W_DESC();
-////
-////
-////                        //模板下载pdf数量
-////                        media.mt_d_p_num = jsonmedia.getMT_D_P_NUM();
-////                        //模板下载pdf描述
-////                        media.mt_d_p_desc = jsonmedia.getMT_D_P_DESC();
-////                        //模板下载excel数量
-////                        media.mt_d_e_num = jsonmedia.getMT_D_E_NUM();
-////                        //模板下载excel描述
-////                        media.mt_d_e_desc = jsonmedia.getMT_D_E_DESC();
-//                        //模板备注
-//                        media.mt_is_note = jsonmedia.getMT_IS_NOTE();
-//
-//
-//                        //模板状态
-//                        media.mt_status = jsonmedia.getMT_STATUS();
-//
-//                        MediaPro repo1 = new MediaPro(getActivity());
-//                        if (repo1.getID(jsonmedia.getMT_ID())) {
-//                            repo1.update(media);
-//                            Log.i(TAG, "media表更新:" + jsonmedia.getMT_ID());
-//
-//
-//                        } else {
-//                            repo1.insert(media);
-//                            Log.i(TAG, "media表插入:" + jsonmedia.getMT_ID());
-//
-//
-//                        }
-
-
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        editor.putString("AUTH_TOKEN", user.getAUTH_TOKEN());
-                        editor.putString("USER_ACCOUNT", user.getUSER_ACCOUNT());
-                        editor.putString("USER_NAME", user.getUSER_NAME());
-                        editor.putString("USER_IDE", user.getUSER_IDE());
-                        editor.putString("USER_TEL", user.getUSER_TEL());
-                        editor.putString("USER_DEPT_NAME", user.getUSER_DEPT_NAME());
-                        editor.putString("USER_DEPT_ORG_CODE", user.getUSER_DEPT_ORG_CODE());
-                        editor.commit();
-
-
-
                     }
+                    if (mediabeanList.size() > 0) {
+                        for (int i = 0; i < mediabeanList.size(); i++) {
+
+                            ServerBean.MediaBean bean = mediabeanList.get(i);
+
+                            MEDIA media = new MEDIA();
+                            //记录主键
+                            media.mt_no = bean.getMT_ID();
+                            //模板名称
+                            media.mt_name = bean.getMT_NAME();
+                            //模板项目信息
+                            media.mt_item_info = bean.getMT_ITEM_INFO();
+                            //模板上传照片数量
+//                                media.mt_u_7_desc = bean.getMT_U_7_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_8_desc = bean.getMT_U_8_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_9_desc = bean.getMT_U_9_DESC();
+                            //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
+                            media.mt_d_desc = bean.getMT_D_DESC();
+
+                            media.mt_is_note = bean.getMT_IS_NOTE();
+
+
+                            //模板状态
+                            media.mt_status = bean.getMT_STATUS();
+
+                            MediaPro repo1 = new MediaPro(getActivity());
+                            if (repo1.getID(bean.getMT_ID())) {
+                                repo1.update(media);
+                                Log.i(TAG, "media表更新:" + bean.getMT_ID());
+
+
+                            } else {
+                                repo1.insert(media);
+                                Log.i(TAG, "media表插入:" + bean.getMT_ID());
+
+
+                            }
+                        }
+                    }
+
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString("AUTH_TOKEN", user.getAUTH_TOKEN());
+                    editor.putString("USER_ACCOUNT", user.getUSER_ACCOUNT());
+                    editor.putString("USER_NAME", user.getUSER_NAME());
+                    editor.putString("USER_IDE", user.getUSER_IDE());
+                    editor.putString("USER_TEL", user.getUSER_TEL());
+                    editor.putString("USER_DEPT_NAME", user.getUSER_DEPT_NAME());
+                    editor.putString("USER_DEPT_ORG_CODE", user.getUSER_DEPT_ORG_CODE());
+                    editor.commit();
+
+
                 } else {
-                    Log.i(TAG, "解析失败" + mag);
-                    Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
+
                 }
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Log.i("LogActivity","onError网络请求错误"+ex);
-//                Toast.makeText(LoginActivity.this, "网络连接", Toast.LENGTH_LONG).show();
-
-                Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -520,6 +450,7 @@ public class ContentFragment extends ListFragment {
         });
 //            Toast.makeText(LoginActivity.this, "用户名或密码错误请重新输入", Toast.LENGTH_LONG).show();
 //
+
     }
     @Override
     public void onStart() {
@@ -528,32 +459,23 @@ public class ContentFragment extends ListFragment {
 
     @Override
     public void onResume() {
+        Log.i(TAG,"onResume");
         URL = "http://"+sharedPrefs.getString("CONNECT_IP", "null")+":"+sharedPrefs.getString("CONNECT_PORT", "null");
         TaskPro repo = new TaskPro(getActivity());
+        taskList = repo.showStatusList(getPosition(), userAcc);
         if(getPosition()==0) {
-            taskList = repo.showStatusList(getPosition()+"", userAcc);
-            ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
-            setListAdapter(adapter);
+            if(taskList.size()>0) {
+                Log.i(TAG, "item_main_content" + taskList.get(0).get("task_status"));
+                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
+                setListAdapter(adapter);
+            }
         }
         else{
-            taskList = repo.showStatusList(getPosition()+"", userAcc);
-//            if(taskList.get(0).get("task_status").equals("正在审核")){
-//                tv_status.setTextColor(0xff9900);
-//
-//            }else if(taskList.get(0).get("task_status").equals("审核通过")){
-//                tv_status.setTextColor(0x00ff22);
-//            }
-//
-//            else if(taskList.get(0).get("task_status").equals("审核失败")){
-//                tv_status.setTextColor(0xff4422);
-//            }
-//
-//            else if(taskList.get(0).get("task_status").equals("任务失效")){
-//                tv_status.setTextColor(0xccc);
-//            }
-            ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no","task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2,R.id.item_audit_ruf_2, R.id.item_date_2});
-            setListAdapter(adapter);
-
+            if(taskList.size()>0) {
+                Log.i(TAG, "item_main_over" + taskList.get(0).get("task_status"));
+                ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
+                setListAdapter(adapter);
+            }
         }
         super.onResume();
     }

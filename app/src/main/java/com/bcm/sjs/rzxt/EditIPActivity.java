@@ -58,6 +58,9 @@ public class EditIPActivity extends AppCompatActivity {
                     editor.putString("CONNECT_IP", et_connect_ip.getText().toString());
                     editor.putString("CONNECT_PORT", et_connect_port.getText().toString());
                     editor.commit();
+                Log.i(TAG,"连接名："+sharedPrefs.getString("CONNECT_NAME", " "));
+                Log.i(TAG,"连接IP："+sharedPrefs.getString("CONNECT_IP", " "));
+                Log.i(TAG,"连接端口："+sharedPrefs.getString("CONNECT_PORT", " "));
 
                     System.exit(0);
 //                Intent i = new Intent(EditIPActivity.this,MainActivity.class);

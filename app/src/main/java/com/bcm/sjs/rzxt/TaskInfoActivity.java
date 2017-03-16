@@ -17,6 +17,7 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,15 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bcm.sjs.rzxt.Adapter.TaskInfoDownReAdapter;
-import com.bcm.sjs.rzxt.Adapter.TaskInfoGetReAdapter;
+import com.bcm.sjs.rzxt.Adapter.TaskInfoGet1ReAdapter;
+import com.bcm.sjs.rzxt.Adapter.TaskInfoGet2ReAdapter;
+import com.bcm.sjs.rzxt.Adapter.TaskInfoGet3ReAdapter;
 import com.bcm.sjs.rzxt.DB.MEDIA;
 import com.bcm.sjs.rzxt.DB.MediaPro;
 import com.bcm.sjs.rzxt.DB.ServerBean;
-import com.bcm.sjs.rzxt.DB.TASK;
 import com.bcm.sjs.rzxt.DB.TaskPro;
 import com.bcm.sjs.rzxt.Utils.FileUtils;
 import com.bcm.sjs.rzxt.view.ActionSheetDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
@@ -43,7 +49,6 @@ import org.xutils.x;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,21 +69,33 @@ public class TaskInfoActivity extends AppCompatActivity {
     private boolean isVisible = true;
     private LinearLayout ly_com_info,ly_download,ly_memo,ly_get1,ly_get2,ly_get3;
     private String URL="";
+    private String[] type7img, type8img,type9img;
+    private int  sumLeng ,fen;
     private SharedPreferences sharedPrefs;
     private ProgressDialog progressDialog;
+    private ProgressDialog UpDialog;
     private String AUTH_TOKEN;
     private final int REQUEST_CODE_CAMERA = 1000;
     private final int REQUEST_CODE_GALLERY = 1001;
     private final int REQUEST_CODE_CROP = 1002;
     private final int REQUEST_CODE_EDIT = 1003;
-    private String mPhotoname;
+    private int mPhotoname;
     private MEDIA mMedialist;
     private String task_no;
     private  MediaPro mediapro;
     private String userAcc;
     private ArrayList<HashMap<String, String>> task_info_list;
+    private int uploadi;
+    private String type;
+    private boolean photoflag=false;
+    private  int Dposition;
+    private  String Dname;
+    private String DdownPath;
 
-    private TaskInfoGetReAdapter mGetAdapter;
+
+    private TaskInfoGet1ReAdapter mGetAdapter1;
+    private TaskInfoGet2ReAdapter mGetAdapter2;
+    private TaskInfoGet3ReAdapter mGetAdapter3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,13 +229,10 @@ public class TaskInfoActivity extends AppCompatActivity {
          mediapro = new MediaPro(TaskInfoActivity.this);
         mMedialist= taskPro.getMedialistDown(task_no);
         DownReView(mMedialist);
-        //开始设置RecyclerView
-        Get_RecyclerView1=(RecyclerView)findViewById(R.id.recyclerview_info_get1);
-        Get_RecyclerView2=(RecyclerView)findViewById(R.id.recyclerview_info_get2);
-        Get_RecyclerView3=(RecyclerView)findViewById(R.id.recyclerview_info_get3);
-        GetReView(Get_RecyclerView1,mMedialist);
-        GetReView(Get_RecyclerView2,mMedialist);
-        GetReView(Get_RecyclerView3,mMedialist);
+
+        GetReView1(mMedialist);
+        GetReView2(mMedialist);
+        GetReView3(mMedialist);
 
         saveBtn = (Button)findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() {
@@ -258,8 +272,10 @@ public class TaskInfoActivity extends AppCompatActivity {
         {
 
             @Override
-            public void onItemClick(View view, final int position,final String num)
-            {
+            public void onItemClick(View view,  int position,  String name,  String downPath)
+            {Dposition=position;
+             Dname=name;
+             DdownPath=downPath;
                 new ActionSheetDialog(TaskInfoActivity.this).builder()
                         .setCanceledOnTouchOutside(true)
                         .addSheetItem("下载", ActionSheetDialog.SheetItemColor.DEFAULT,
@@ -268,7 +284,7 @@ public class TaskInfoActivity extends AppCompatActivity {
                                     public void onClick(int which) {
                                         Log.i(TAG,"ActionSheetDialog文件下载");
                                         String path= Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                + File.separator +"RZXT/"+userAcc+task_no+"/Down/"+num;
+                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/";
                                         if(!FileUtils.isFileExist(path)){
                                             try {
                                                 File file= FileUtils.createSDDir(path);
@@ -277,16 +293,18 @@ public class TaskInfoActivity extends AppCompatActivity {
                                             }
                                         }
 
-                                       downloadFile(URL+"/MVNFHM/appInterface/appDownFile"+position,path);
+                                       downloadFile(URL+"/MVNFHM/appInterface/appDownFile",Dname,path,DdownPath);
                                     }
                                 })
                         .addSheetItem("查看", ActionSheetDialog.SheetItemColor.DEFAULT,
                                 new ActionSheetDialog.OnSheetItemClickListener() {
                                     @Override
                                     public void onClick(int which) {
-                                        String path = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                + File.separator +"RZXT/"+userAcc+task_no+"/Down/num";
-                                        if(!FileUtils.isFileExist(path)){
+                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/num";
+//                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+//                                                + "Download/qqmail/";
+                                        if(!FileUtils.isFileExist(cpath)){
                                             Toast.makeText(TaskInfoActivity.this,"本地无该文件",Toast.LENGTH_SHORT).show();
                                         }
                                         else{
@@ -310,7 +328,8 @@ public class TaskInfoActivity extends AppCompatActivity {
 
                                              String file_type = "image/*";
                                              */
-                                            Uri uri = Uri.parse(path);//调用系统自带的播放器
+                                            Uri uri = Uri.parse(cpath);
+//                                            Uri uri = Uri.parse(cpath+"面试通知（北京）");//调用系统自带的播放器
 //                    Uri uri = Uri.parse("sdcard/VideoRecorderTest/"+FileToStr(videoList)[position]);//调用系统自带的播放器
                                             Intent intent = new Intent(Intent.ACTION_VIEW);
                                             intent.setDataAndType(uri, "*/*");
@@ -322,26 +341,22 @@ public class TaskInfoActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onItemLongClick(View view, int position,String num)
-            {
-//                Intent intent = new Intent(getActivity(),PayActivity.class);
-//                intent.putExtra("goodsNum", "num");
-//                startActivity(intent);
-//                Toast.makeText(getActivity(), position + " long click",
-//                        Toast.LENGTH_SHORT).show();
-//                mAdapter.removeData(position);
+            public void onItemLongClick(View view, int position, String numm, String path) {
+
             }
+
+
         });
 
 
     }
 
-    private void GetReView(RecyclerView Get_RecyclerView,MEDIA  medialist) {
+    private void GetReView1(MEDIA  medialist) {
 
         //开始设置RecyclerView
-        Get_RecyclerView=(RecyclerView)findViewById(R.id.recyclerview_info_get1);
+        Get_RecyclerView1=(RecyclerView)findViewById(R.id.recyclerview_info_get1);
         //设置固定大小
-        Get_RecyclerView.setHasFixedSize(true);
+        Get_RecyclerView1.setHasFixedSize(true);
         //创建线性布局
         mLayoutManager = new LinearLayoutManager(TaskInfoActivity.this);
 //        mLayoutManager = new MyCustomLayoutManager(getActivity());
@@ -350,20 +365,20 @@ public class TaskInfoActivity extends AppCompatActivity {
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         //给RecyclerView设置布局管理器
 //        recyclerView_one.setLayoutManager(mLayoutManager);
-        Get_RecyclerView.setLayoutManager(new GridLayoutManager(TaskInfoActivity.this,4));
+        Get_RecyclerView1.setLayoutManager(new GridLayoutManager(TaskInfoActivity.this,4));
 //        Get_RecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
 //                StaggeredGridLayoutManager.HORIZONTAL));
 
         //创建适配器，并且设置
-        mGetAdapter = new TaskInfoGetReAdapter(TaskInfoActivity.this,medialist,task_no);
-        Get_RecyclerView.setAdapter(mGetAdapter);
-        mGetAdapter.setOnItemClickLitener(new TaskInfoGetReAdapter.OnItemClickLitener()
+        mGetAdapter1 = new TaskInfoGet1ReAdapter(TaskInfoActivity.this,medialist,task_no);
+        Get_RecyclerView1.setAdapter(mGetAdapter1);
+        mGetAdapter1.setOnItemClickLitener(new TaskInfoGet1ReAdapter.OnItemClickLitener()
         {
 
             @Override
             public void onItemClick(View view, final int position, String num)
-            {
-                mPhotoname=num + ".JPG";
+            {   type=num;
+                mPhotoname=position ;
                 new ActionSheetDialog(TaskInfoActivity.this).builder()
                         .setCanceledOnTouchOutside(true)
                         .addSheetItem("拍照", ActionSheetDialog.SheetItemColor.DEFAULT,
@@ -390,8 +405,9 @@ public class TaskInfoActivity extends AppCompatActivity {
             {
 
                 PhotoInfo ptinfo = new PhotoInfo();
+                Log.i(TAG,"461 mPhotoname ="+mPhotoname);
                 ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + File.separator +"RZXT/"+userAcc+task_no+"/Get/" + mPhotoname);
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+type + mPhotoname+ ".JPG");
                 //mPhotoname=0@qwe
                 List<PhotoInfo> PhotoList= new ArrayList<>();
                 PhotoList.add(0, ptinfo);
@@ -403,11 +419,152 @@ public class TaskInfoActivity extends AppCompatActivity {
         });
 
     }
-    private void downloadFile(String url, String path) {
+    private void GetReView2(MEDIA  medialist) {
+
+        //开始设置RecyclerView
+        Get_RecyclerView2=(RecyclerView)findViewById(R.id.recyclerview_info_get2);
+        //设置固定大小
+        Get_RecyclerView2.setHasFixedSize(true);
+        //创建线性布局
+        mLayoutManager = new LinearLayoutManager(TaskInfoActivity.this);
+//        mLayoutManager = new MyCustomLayoutManager(getActivity());
+//        Goos_RecyclerView.setLayoutManager(mLayoutManager);
+        //垂直方向
+        mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+        //给RecyclerView设置布局管理器
+//        recyclerView_one.setLayoutManager(mLayoutManager);
+        Get_RecyclerView2.setLayoutManager(new GridLayoutManager(TaskInfoActivity.this,4));
+//        Get_RecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
+//                StaggeredGridLayoutManager.HORIZONTAL));
+
+        //创建适配器，并且设置
+        mGetAdapter2 = new TaskInfoGet2ReAdapter(TaskInfoActivity.this,medialist,task_no);
+        Get_RecyclerView2.setAdapter(mGetAdapter2);
+        mGetAdapter2.setOnItemClickLitener(new TaskInfoGet2ReAdapter.OnItemClickLitener()
+        {
+
+            @Override
+            public void onItemClick(View view, final int position, String num)
+            {   type=num;
+                mPhotoname=position ;
+                new ActionSheetDialog(TaskInfoActivity.this).builder()
+                        .setCanceledOnTouchOutside(true)
+                        .addSheetItem("拍照", ActionSheetDialog.SheetItemColor.DEFAULT,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                        Log.i(TAG,"ActionSheetDialog拍照");
+                                        GalleryFinal.openCamera(REQUEST_CODE_CAMERA, mOnHanlderResultCallback);
+                                    }
+                                })
+                        .addSheetItem("相册", ActionSheetDialog.SheetItemColor.DEFAULT,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                        GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, mOnHanlderResultCallback);
+
+
+                                    }
+                                }).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position,String num)
+            {
+
+                PhotoInfo ptinfo = new PhotoInfo();
+                Log.i(TAG,"461 mPhotoname ="+mPhotoname);
+                ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+type + mPhotoname+ ".JPG");
+                //mPhotoname=0@qwe
+                List<PhotoInfo> PhotoList= new ArrayList<>();
+                PhotoList.add(0, ptinfo);
+
+                Intent intent = new Intent(TaskInfoActivity.this, PhotoPreviewActivity.class);
+                intent.putExtra("photo_list", (Serializable) PhotoList);
+                startActivity(intent);
+            }
+        });
+
+    }
+    private void GetReView3(MEDIA  medialist) {
+
+        //开始设置RecyclerView
+        Get_RecyclerView3=(RecyclerView)findViewById(R.id.recyclerview_info_get3);
+        //设置固定大小
+        Get_RecyclerView3.setHasFixedSize(true);
+        //创建线性布局
+        mLayoutManager = new LinearLayoutManager(TaskInfoActivity.this);
+//        mLayoutManager = new MyCustomLayoutManager(getActivity());
+//        Goos_RecyclerView.setLayoutManager(mLayoutManager);
+        //垂直方向
+        mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+        //给RecyclerView设置布局管理器
+//        recyclerView_one.setLayoutManager(mLayoutManager);
+        Get_RecyclerView3.setLayoutManager(new GridLayoutManager(TaskInfoActivity.this,4));
+//        Get_RecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1,
+//                StaggeredGridLayoutManager.HORIZONTAL));
+
+        //创建适配器，并且设置
+        mGetAdapter3 = new TaskInfoGet3ReAdapter(TaskInfoActivity.this,medialist,task_no);
+        Get_RecyclerView3.setAdapter(mGetAdapter3);
+        mGetAdapter3.setOnItemClickLitener(new TaskInfoGet3ReAdapter.OnItemClickLitener()
+        {
+
+            @Override
+            public void onItemClick(View view,  int position, String num)
+            {   type=num;
+                Log.i(TAG,"String position ="+position);
+                mPhotoname=position;
+                type=num;
+                Log.i(TAG,"504 mPhotoname ="+mPhotoname);
+                new ActionSheetDialog(TaskInfoActivity.this).builder()
+                        .setCanceledOnTouchOutside(true)
+                        .addSheetItem("拍照", ActionSheetDialog.SheetItemColor.DEFAULT,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                        Log.i(TAG,"ActionSheetDialog拍照");
+                                        GalleryFinal.openCamera(REQUEST_CODE_CAMERA, mOnHanlderResultCallback);
+                                    }
+                                })
+                        .addSheetItem("相册", ActionSheetDialog.SheetItemColor.DEFAULT,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                        GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, mOnHanlderResultCallback);
+
+
+                                    }
+                                }).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position,String num)
+            {
+
+                PhotoInfo ptinfo = new PhotoInfo();
+                Log.i(TAG,"532 mPhotoname ="+mPhotoname);
+                ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/" +type+ mPhotoname+ ".JPG");
+                //mPhotoname=0@qwe
+                List<PhotoInfo> PhotoList= new ArrayList<>();
+                PhotoList.add(0, ptinfo);
+
+                Intent intent = new Intent(TaskInfoActivity.this, PhotoPreviewActivity.class);
+                intent.putExtra("photo_list", (Serializable) PhotoList);
+                startActivity(intent);
+            }
+        });
+
+    }
+    private void downloadFile(String url,String name, String Filepath,String downPath) {
          progressDialog = new ProgressDialog(this);
         RequestParams requestParams = new RequestParams(url);
         requestParams.addParameter("AUTH_TOKEN", AUTH_TOKEN);
-        requestParams.setSaveFilePath(path);
+        requestParams.addParameter("FILE_NAME", name);
+        requestParams.addParameter("FILE_PATH", downPath);
+        requestParams.setSaveFilePath(Filepath);
         Log.i(TAG,"requestParams="+requestParams);
         x.http().get(requestParams, new Callback.ProgressCallback<File>() {
             @Override
@@ -421,7 +578,7 @@ public class TaskInfoActivity extends AppCompatActivity {
             @Override
             public void onLoading(long total, long current, boolean isDownloading) {
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.setMessage("亲，努力下载中。。。");
+                progressDialog.setMessage("努力下载中。。。");
                 progressDialog.show();
                 progressDialog.setMax((int) total);
                 progressDialog.setProgress((int) current);
@@ -451,10 +608,191 @@ public class TaskInfoActivity extends AppCompatActivity {
     }
 
     private void uploadHttp(String url){
-        String[] GetInfo =mMedialist.mt_u_desc.split("%");
-        for (int imagei = 0; imagei < GetInfo.length; imagei++) {
-            String[] img_desc = GetInfo[imagei].split("@");
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/"+userAcc+task_no+"/Get/" + mPhotoname;
+        UpDialog  = new ProgressDialog(this);
+        UpDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        UpDialog.setMessage("努力上传中。。。");
+        UpDialog.show();
+        UpDialog.setMax((int) 100);
+        UpDialog.setProgress((int) 0);
+        UpDialog.setCancelable(false);//弹框弹出时页面无法点击
+        type7img =mMedialist.mt_u_7_desc.split("%");
+        type8img =mMedialist.mt_u_8_desc.split("%");
+        type9img =mMedialist.mt_u_9_desc.split("%");
+        sumLeng=type7img.length+type8img.length+type9img.length-3;
+        if(!TextUtils.isEmpty(com_info_memo.getText())){
+            sumLeng++;
+        }
+         fen=100/sumLeng;
+        for (int imagei = 0; imagei < type7img.length-1; imagei++) {
+            String[] img_desc7 = type7img[imagei].split("@");
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+img_desc7[0] +"/"+ img_desc7[1];
+            Log.i(TAG, "path=" + path);
+            File f = new File(path);
+            if (f.exists()) {
+                RequestParams params = new RequestParams(url);
+                //支持断点续传
+                params.setAutoResume(true);
+                params.setMultipart(true);
+                /**
+                 * 多媒体文件上传
+                 *
+                 * @param AUTH_TOKEN 手机令牌
+                 * @param FILE 文件对象
+                 * @param APPLY_ID 多媒体文件类型，0-照片，1-录像
+                 * @param TASK_NO 信贷员ID
+                 * @param TASK_ITEM_NO 任务号，客户基本信息的任务号为info
+                 * @param FILE_TYPE 文件描述，标明文件的位置及说明
+                 * @return
+                 * setAsJsonContent（boolean is）
+                 * 如果有中文，要进行URLEncoder.encode方法
+                 *params.addBodyParameter("deviceIntoTime",URLEncoder.encode(deviceIntoTime, "utf-8"));
+                 */
+                params.addBodyParameter("AUTH_TOKEN", AUTH_TOKEN);
+                params.addBodyParameter("FILE", new File(path));
+                params.addBodyParameter("APPLY_ID",task_info_list.get(0).get("apply_id"));
+                params.addBodyParameter("TASK_NO", task_no);
+                params.addBodyParameter("TASK_ITEM_NO", task_info_list.get(0).get("task_item_no"));
+                params.addBodyParameter("FILE_TYPE", img_desc7[0]);
+                Log.i(TAG, "629params:" + params);
+                x.http().post(params, new Callback.CommonCallback<String>() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.i(TAG,result);
+                        Gson gson = new Gson();
+                        java.lang.reflect.Type type = new TypeToken<ServerBean>() {}.getType();
+                         ServerBean serverBean = gson.fromJson(result, type);
+//                serverBean = gson.fromJson(result, ServerBean.class);
+                        int err = serverBean.getError();
+                        String msg = serverBean.getMsg();
+                        if (err == 000) {
+
+                                    uploadi++;
+                                } else {
+                                    Toast.makeText(TaskInfoActivity.this,msg+"请检查网络",Toast.LENGTH_SHORT).show();
+                                }
+
+
+                        UpDialog.setProgress((int) fen*uploadi);
+                    }
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+                        Log.i(TAG,"uploadi="+uploadi);
+                       if(uploadi==sumLeng){
+                           mMedialist.mt_status=2+"";
+                           String okstr =mediapro.UpdateStatus(mMedialist);
+                           Log.i(TAG,"okstr="+okstr);
+                    }
+                      Intent intent = new Intent(TaskInfoActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+            } else {
+                Log.i(TAG, path + "照片上传失败，不存在");
+            }
+        }
+
+        for (int imagei = 0; imagei < type8img.length-1; imagei++) {
+            String[] img_desc8 = type8img[imagei].split("@");
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+img_desc8[0]+"/" + img_desc8[1];
+            Log.i(TAG, "path=" + path);
+            File f = new File(path);
+            if (f.exists()) {
+                RequestParams params = new RequestParams(url);
+                //支持断点续传
+                params.setAutoResume(true);
+                params.setMultipart(true);
+                /**
+                 * 多媒体文件上传
+                 *
+                 * @param AUTH_TOKEN 手机令牌
+                 * @param FILE 文件对象
+                 * @param APPLY_ID 多媒体文件类型，0-照片，1-录像
+                 * @param TASK_NO 信贷员ID
+                 * @param TASK_ITEM_NO 任务号，客户基本信息的任务号为info
+                 * @param FILE_TYPE 文件描述，标明文件的位置及说明
+                 * @return
+                 * setAsJsonContent（boolean is）
+                 * 如果有中文，要进行URLEncoder.encode方法
+                 *params.addBodyParameter("deviceIntoTime",URLEncoder.encode(deviceIntoTime, "utf-8"));
+                 */
+                params.addBodyParameter("AUTH_TOKEN", AUTH_TOKEN);
+                params.addBodyParameter("FILE", new File(path));
+                params.addBodyParameter("APPLY_ID",task_info_list.get(0).get("apply_id"));
+                params.addBodyParameter("TASK_NO", task_no);
+                params.addBodyParameter("TASK_ITEM_NO", task_info_list.get(0).get("task_item_no"));
+                params.addBodyParameter("FILE_TYPE", img_desc8[0]);
+                Log.i(TAG, "693params:" + params);
+                x.http().post(params, new Callback.CommonCallback<String>() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.i(TAG,result);
+                        Gson gson = new Gson();
+                        java.lang.reflect.Type type = new TypeToken<ServerBean>() {}.getType();
+                        ServerBean serverBean = gson.fromJson(result, type);
+//                serverBean = gson.fromJson(result, ServerBean.class);
+                        int err = serverBean.getError();
+                        String msg = serverBean.getMsg();
+                        if (err == 000) {
+
+                            uploadi++;
+                        } else {
+                            Toast.makeText(TaskInfoActivity.this,msg+"请检查网络",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        UpDialog.setProgress((int) fen*uploadi);
+                    }
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFinished() {
+                        Log.i(TAG,"uploadi="+uploadi);
+                        if(uploadi==sumLeng){
+                            mMedialist.mt_status=2+"";
+                            String okstr =mediapro.UpdateStatus(mMedialist);
+                            Log.i(TAG,"okstr="+okstr);
+                            if(UpDialog!=null && UpDialog.isShowing()){
+                                UpDialog.dismiss();
+                            }
+                        }
+                        Intent intent = new Intent(TaskInfoActivity.this,MainActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+            } else {
+                Log.i(TAG, path + "照片上传失败，不存在");
+            }
+        }
+
+        for (int imagei = 0; imagei < type9img.length-1; imagei++) {
+            String[] img_desc = type9img[imagei].split("@");
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+ img_desc[0]+ "/"+img_desc[1];
             Log.i(TAG, "path=" + path);
             File f = new File(path);
             if (f.exists()) {
@@ -477,33 +815,60 @@ public class TaskInfoActivity extends AppCompatActivity {
                  *params.addBodyParameter("deviceIntoTime",URLEncoder.encode(deviceIntoTime, "utf-8"));
                  */
                 params.addBodyParameter("AUTH_TOKEN", AUTH_TOKEN);
-                params.addBodyParameter("FILE", new File(path));
-//                params.addBodyParameter("media_type", "0");
-//                params.addBodyParameter("userAccount", userAccount);
-//                params.addBodyParameter("task_no", EventId);
-//                params.addBodyParameter("img_desc", URLEncoder.encode(photoArray[imagei], "utf-8"));
-
-                Log.i(TAG, "params:" + params);
+                params.addBodyParameter("FILE", f);
+                params.addBodyParameter("APPLY_ID",task_info_list.get(0).get("apply_id"));
+                params.addBodyParameter("TASK_NO", task_no);
+                params.addBodyParameter("TASK_ITEM_NO", task_info_list.get(0).get("task_item_no"));
+                params.addBodyParameter("FILE_TYPE",img_desc[0]);
+                Log.i(TAG, "756+params:" + params);
                 x.http().post(params, new Callback.CommonCallback<String>() {
 
                     @Override
                     public void onSuccess(String result) {
-                        mMedialist.mt_status=2+"";
-                        mediapro.UpdateStatus(mMedialist);
+                        Log.i(TAG,result);
+                        Gson gson = new Gson();
+                        java.lang.reflect.Type type = new TypeToken<ServerBean>() {}.getType();
+                        ServerBean serverBean = gson.fromJson(result, type);
+//                serverBean = gson.fromJson(result, ServerBean.class);
+                        int err = serverBean.getError();
+                        String msg = serverBean.getMsg();
+                        if (err == 000) {
 
+                            uploadi++;
+                        } else {
+                            Toast.makeText(TaskInfoActivity.this,msg+"请检查网络",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        UpDialog.setProgress((int) fen*uploadi);
                     }
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void onCancelled(CancelledException cex) {
-
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void onFinished() {
+                        Log.i(TAG,"uploadi="+uploadi);
+                        if(uploadi==sumLeng){
+                            mMedialist.mt_status=2+"";
+                            String okstr =mediapro.UpdateStatus(mMedialist);
+                            Log.i(TAG,"okstr="+okstr);
+                            if(UpDialog!=null && UpDialog.isShowing()){
+                                UpDialog.dismiss();
+                            }
+                            Intent intent = new Intent(TaskInfoActivity.this,MainActivity.class);
+                            startActivity(intent);
+                        }
 
                     }
                 });
@@ -512,6 +877,90 @@ public class TaskInfoActivity extends AppCompatActivity {
                 Log.i(TAG, path + "照片上传失败，不存在");
             }
         }
+        if(!com_info_memo.getText().equals("")) {
+                RequestParams params = new RequestParams(url);
+                //支持断点续传
+                params.setAutoResume(true);
+                params.setMultipart(true);
+                /**
+                 * 多媒体文件上传
+                 *
+                 * @param auth_token 手机令牌
+                 * @param file 文件对象
+                 * @param media_type 多媒体文件类型，0-照片，1-录像
+                 * @param userAccount 信贷员ID
+                 * @param task_no 任务号，客户基本信息的任务号为info
+                 * @param img_desc 文件描述，标明文件的位置及说明
+                 * @return
+                 * setAsJsonContent（boolean is）
+                 * 如果有中文，要进行URLEncoder.encode方法
+                 *params.addBodyParameter("deviceIntoTime",URLEncoder.encode(deviceIntoTime, "utf-8"));
+                 */
+                params.addBodyParameter("AUTH_TOKEN", AUTH_TOKEN);
+                params.addBodyParameter("FILE", com_info_memo.getText().toString());
+                params.addBodyParameter("APPLY_ID", task_info_list.get(0).get("apply_id"));
+                params.addBodyParameter("TASK_NO", task_no);
+                params.addBodyParameter("TASK_ITEM_NO", task_info_list.get(0).get("task_item_no"));
+                params.addBodyParameter("FILE_TYPE", "99");
+                Log.i(TAG, "894+params:" + params);
+                Log.i(TAG, "!TextUtils.isEmpty(com_info_memo.getText())" + !com_info_memo.getText().equals(""));
+                Log.i(TAG, "com_info_memo.getText()" + com_info_memo.getText().toString());
+
+                x.http().post(params, new Callback.CommonCallback<String>() {
+
+                    @Override
+                    public void onSuccess(String result) {
+                        Log.i(TAG,result);
+                        Gson gson = new Gson();
+                        java.lang.reflect.Type type = new TypeToken<ServerBean>() {}.getType();
+                        ServerBean serverBean = gson.fromJson(result, type);
+//                serverBean = gson.fromJson(result, ServerBean.class);
+                        int err = serverBean.getError();
+                        String msg = serverBean.getMsg();
+                        if (err == 000) {
+
+                            uploadi++;
+                        } else {
+                            Toast.makeText(TaskInfoActivity.this,msg+"请检查网络",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                        UpDialog.setProgress((int) fen*uploadi);
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFinished() {
+                        Log.i(TAG,"uploadi="+uploadi);
+                        if(uploadi==sumLeng){
+                            mMedialist.mt_status=2+"";
+                            String okstr =mediapro.UpdateStatus(mMedialist);
+                            Log.i(TAG,"okstr="+okstr);
+                            if(UpDialog!=null && UpDialog.isShowing()){
+                                UpDialog.dismiss();
+                                Intent intent = new Intent(TaskInfoActivity.this,MainActivity.class);
+                                startActivity(intent);
+                            }
+
+
+                        }
+                    }
+                });
+
+        }
 
     }
     //拍照照片回调函数
@@ -519,9 +968,9 @@ public class TaskInfoActivity extends AppCompatActivity {
 
         @Override
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-
+            photoflag=true;
             String path= Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + File.separator +"RZXT/"+userAcc+task_no+"/Get/";
+                    + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+type+"/";
             if(!FileUtils.isFileExist(path)){
                 try {
                     File file= FileUtils.createSDDir(path);
@@ -531,48 +980,55 @@ public class TaskInfoActivity extends AppCompatActivity {
             }
                 //获取图片
                 Bitmap Bitmap = BitmapFactory.decodeFile(resultList.get(0).getPhotoPath());
-
                 Log.i(TAG,resultList.get(0).getPhotoPath());
-                //新路径
-//                String photoBimpstr = Environment.getExternalStorageDirectory()+"/XHLS/" + UserID + "/" + event_id + "/PHOTO/";
-
-
-
                 //把新图片放到指定路径
-                FileUtils.saveBitmap(path,mPhotoname,Bitmap);
-                //删除旧图片
-//                String fileName = resultList.get(0).getPhotoPath();
-//                File file = new File(fileName);
-//                FileUtils.delFile(file);
-
-//                String value= getmediaList.get(0).get("mt_image_desc");
-//                String[] array = value.split("=");
-//                for(int i=0;i< array.length;i++ ){
-//                    File f = new File(path, i + ".JPG");
-//                    //如果同名照片存在则添加到list
-//                    if (f.exists()) {
-//                        PhotoInfo ptinfo = new PhotoInfo();
-//                        ptinfo.setPhotoPath(path+ i + ".JPG");
-//                        resultList.add(i,ptinfo);
-//                    }
-//                    else{
-//                        resultList.add(i,null);
-//                    }
-//                }
-
-
-//                mPhotoList.addAll(resultList);
-//                mChoosePhotoListAdapter.notifyDataSetChanged();
-//                initView();
-//                Toast.makeText(EventEventActivity.this, "resultList" + resultList, Toast.LENGTH_SHORT).show();
-
+            Log.i(TAG,"805 mPhotoname ="+mPhotoname);
+                FileUtils.saveBitmap(path,mPhotoname+ ".JPG",Bitmap);
         }
 
         @Override
         public void onHanlderFailure(int requestCode, String errorMsg) {
+            photoflag=false;
             Toast.makeText(TaskInfoActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
         }
     };
+
+    public void descUp(){
+                int poss=0;
+                poss=mPhotoname+1;
+        if(type.equals("7")){
+            String[] oneGetInfo = mMedialist.mt_u_7_desc.split("%");
+            if(poss==oneGetInfo.length) {
+                Log.i(TAG, "num=" + type);
+                mMedialist.mt_u_7_desc = mMedialist.mt_u_7_desc + "%" + type + "@" + poss + ".jpg";
+            }
+        }else if(type.equals("8")){
+            String[] oneGetInfo = mMedialist.mt_u_8_desc.split("%");
+            if(poss==oneGetInfo.length) {
+                mMedialist.mt_u_8_desc = mMedialist.mt_u_8_desc + "%" + type + "@" + poss + ".jpg";
+            }
+        }else if(type.equals("9")){
+            String[] oneGetInfo = mMedialist.mt_u_9_desc.split("%");
+            if(poss==oneGetInfo.length) {
+                mMedialist.mt_u_9_desc = mMedialist.mt_u_9_desc + "%" + type + "@" + poss + ".jpg";
+            }
+        }
+      Log.i(TAG,"827mMediaList.no"+mMedialist.mt_no);
+        mediapro.addMediaGetDesc(mMedialist);
+
+        //        Log.i(TAG,"810 oneGetInfo ="+oneGetInfo.length);
+
+
+
+//        if(poss==oneGetInfo.length){
+//            MediaPro mediapro = new MediaPro(TaskInfoActivity.this);
+//            Log.i(TAG,"num="+type);
+
+//            mediapro.update(mMedialist);
+//            mediapro.addMediaGetDesc(mMedialist.mt_no,mPhotoname+".JPG",type);
+
+//        }
+    }
     @Override
     protected void onStart() {
         sharedPrefs = getSharedPreferences("RZShare", Context.MODE_PRIVATE);
@@ -583,104 +1039,25 @@ public class TaskInfoActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        if(photoflag){
+            descUp();
+        }
         URL = "http://"+sharedPrefs.getString("CONNECT_IP", "null")+":"+sharedPrefs.getString("CONNECT_PORT", "null");
         DownReView(mMedialist);
-        GetReView(Get_RecyclerView1,mMedialist);
-        GetReView(Get_RecyclerView2,mMedialist);
-        GetReView(Get_RecyclerView3,mMedialist);
+        GetReView1(mMedialist);
+        GetReView2(mMedialist);
+        GetReView3(mMedialist);
+        Log.i(TAG,"844=onResume");
+        photoflag=false;
         super.onResume();
     }
 
     @Override
     protected void onStop() {
         TaskPro repo = new TaskPro(TaskInfoActivity.this);
-        TASK task = new TASK();
-        task.task_no=task_no;
-        task.task_type =  task_info_list.get(0).get("task_type");
-        task.task_status =  task_info_list.get(0).get("task_status");
-        task.task_is_early_file = task_info_list.get(0).get("task_is_early_file");
-
-
-        //检查机构代码
-        task.task_check_org_no = task_info_list.get(0).get("task_check_org_no");
-        //检查机构名称
-        task.task_check_org_name =  task_info_list.get(0).get("task_check_org_name");
-        //检查类型(首次检查、定期检查、不定期检查)
-        task.task_check_type =  task_info_list.get(0).get("task_check_type");
-        //检查选项(按合同检查)
-        task.task_check_option = task_info_list.get(0).get("ln_check_option");
-        //任务检查人账号
-        task.task_iner_acc =  task_info_list.get(0).get("task_iner_acc");
-
-
-        //任务检查人姓名
-        task.task_iner_name =  task_info_list.get(0).get("task_iner_name");
-        //任务开始日期
-        task.task_start_date = task_info_list.get(0).get("task_start_date");
-        //任务截止日期
-        task.task_end_date =  task_info_list.get(0).get("task_end_date");
-        //任务完成日期
-        task.task_finish_date =  task_info_list.get(0).get("task_finish_date");
-        //审核人账号
-        task.task_audit_acc =  task_info_list.get(0).get("task_audit_acc");
-
-
-        //审核人姓名
-        task.task_audit_name =  task_info_list.get(0).get("task_audit_name");
-        //申请公司编号
-        task.task_com_no =  task_info_list.get(0).get("task_com_no");
-        //申请公司名称
-        task.task_com_name =  task_info_list.get(0).get("task_com_name");
-        //申请合同编号
-        task.task_con_no =  task_info_list.get(0).get("task_con_no");
-        //申请项目编号
-        task.task_item_no =  task_info_list.get(0).get("task_item_no");
-
-
-        //申请产品编号
-        task.task_prdt_no =  task_info_list.get(0).get("task_prdt_no");
-        //申请产品名称
-        task.task_prdt_name =  task_info_list.get(0).get("task_prdt_name");
-        //申请生产类型
-        task.task_prdt_type =  task_info_list.get(0).get("task_prdt_type");
-        //申请认证范围
-        task.task_rz_scope =  task_info_list.get(0).get("task_rz_scope");
-        //申请认证类型
-        task.task_rz_type =  task_info_list.get(0).get("task_rz_type");
-
-        //申请公司地址
-        task.task_com_addr =  task_info_list.get(0).get("task_com_addr");
-        //申请公司电话
-        task.task_com_tel =  task_info_list.get(0).get("task_com_tel");
-        // 申请公司邮编
-        task.task_com_post_code =  task_info_list.get(0).get("task_com_post_code");
-        //申请公司邮箱
-        task.task_com_email =  task_info_list.get(0).get("task_com_email");
-        //申请公司传真
-        task.task_com_fax =  task_info_list.get(0).get("task_com_fax");
-
-
-        //申请公司网络url
-        task.task_web_url =  task_info_list.get(0).get("task_web_url");
-        //公司联系人姓名
-        task.task_com_con_name =  task_info_list.get(0).get("task_com_con_name");
-        //公司联系人电话
-        task.task_com_con_tel =  task_info_list.get(0).get("task_com_con_tel");
-        //公司联系人职位
-        task.task_com_con_ide =  task_info_list.get(0).get("task_com_con_ide");
-        //申请产品介绍
-        task.task_item_info =  task_info_list.get(0).get("task_item_info");
-
-        //信息采集模板ID
-        task.task_mt_id = task_info_list.get(0).get("task_mt_id");
         //任务备注
-        task.task_note =  com_info_memo.getText().toString() ;
-        repo.update(task);
-
-//        sharedPrefs = getSharedPreferences("RZShare", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPrefs.edit();
-//        editor.putString("EDIT_MEMO", com_info_memo.getText().toString());
-//        editor.commit();
+        String task_note =  com_info_memo.getText().toString() ;
+        repo.updateNote(task_no,task_note);
         Log.i(TAG,"onStop");
         super.onStop();
     }
@@ -696,4 +1073,5 @@ public class TaskInfoActivity extends AppCompatActivity {
         Log.i(TAG,"onDestroy");
         super.onDestroy();
     }
+
 }

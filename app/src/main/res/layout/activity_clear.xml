@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.bcm.sjs.rzxt.my.ClearActivity"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/light_line">
     <RelativeLayout
         android:id="@+id/ly_manage_title"
         android:layout_height="100dp"
@@ -49,47 +49,81 @@
             android:visibility="gone" />
 
     </RelativeLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/lv_srceah"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/ly_manage_title"-->
+
+        <!--android:gravity="center"-->
+        <!--android:background="@color/windowBackground"-->
+        <!--&gt;-->
+
+
+        <!--<EditText-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/etOverEvent"-->
+            <!--android:layout_weight="0.95"-->
+            <!--android:background="@null"/>-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="0.05"-->
+            <!--android:id="@+id/btn_sreach_over_event"-->
+            <!--android:src="@mipmap/ic_search"-->
+            <!--android:background="#fff" />-->
+
+    <!--</LinearLayout>-->
     <LinearLayout
-        android:id="@+id/lv_srceah"
-        android:orientation="horizontal"
+        android:id="@+id/ly_memo_sreach"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
         android:layout_below="@+id/ly_manage_title"
-
-        android:gravity="center"
-        android:background="@color/windowBackground"
-        >
-
-
-        <EditText
-            android:layout_width="wrap_content"
+        android:layout_marginBottom="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/etOverEvent"
-            android:layout_weight="0.95"
-            android:background="@null"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0.05"
+            android:layout_weight="0.9"
+            android:orientation="horizontal"
+            android:background="@color/white">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_search"
+                android:background="@color/white"/>
+            <EditText
+                android:id="@+id/etOverEvent"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_weight="0.8"
+                android:layout_margin="5dp"
+                android:textSize="16dp"
+                android:padding="4dp"
+                android:background="@color/windowBackground"
+                />
+        </LinearLayout>
+        <Button
             android:id="@+id/btn_sreach_over_event"
-            android:src="@mipmap/ic_search"
-            android:background="#fff" />
-
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/touch_sreach_bg"
+            android:textSize="12dp"
+            android:text="@string/sreach"/>
     </LinearLayout>
 
     <ListView
         android:id="@+id/lv_recent_contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lv_srceah"
+        android:layout_below="@+id/ly_memo_sreach"
         />
 
 
-    <!--<ListView-->
-    <!--android:id="@+id/lv_recent_contact"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent" />-->
 
     <LinearLayout
         android:id="@+id/ll_delete_container"

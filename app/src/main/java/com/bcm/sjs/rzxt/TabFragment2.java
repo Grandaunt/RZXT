@@ -52,6 +52,7 @@ import cn.finalteam.galleryfinal.model.PhotoInfo;
 public class TabFragment2 extends android.support.v4.app.Fragment implements View.OnClickListener{
     private String TAG = this.getClass().getSimpleName();
     private String URL="";
+    private String userAccount="";
     private String path="";
     private LinearLayout Updately,Memoly,Clearly,AboutLy,Settingly,OutLy;
     private ImageButton UserIconIm;
@@ -207,127 +208,127 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
                 break;
         }
     }
-    private void downloadAPK(String appVersion,String Feilpath) {
-        //1.检查SD卡是否挂载上
-
-        //3.发送请求，获取指定APK，放置到指定位置
-        RequestParams params = new RequestParams(URL+"isUpdate");
-        params.addParameter("userAccount", "11000");
-        params.addParameter("appVersion", "0");
-//        params.setSaveFilePath(path);
-        //4.发送请求，传送参数(要下载的apk文件的url，下载成功后存储位置，回调函数)
-
-        Callback.Cancelable post =
-                x.http().post(params, new Callback.ProgressCallback<String>() {
-
-                    @Override
-
-                    public void onSuccess(String result) {
-                        installAPK(path);
-                    }
-
-                    @Override
-
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                        //下载失败
-                        Log.d(TAG, "下载失败");
-                    }
-
-                    @Override
-
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
-
-                    public void onFinished() {
-                    }
-
-                    @Override
-
-                    public void onWaiting() {
-
-                    }
-
-                    @Override
-
-                    public void onStarted() {
-
-                    }
-
-                    @Override
-                    public void onLoading(long total, long current, boolean isDownloading) {
-                        //文件下载时回调的方法
-
-                        Log.i("xxxxxxxxxxxxx", "current<<" + current + "total<<" + total);
-                    }
-                });
-    }
-
-
+//    private void downloadAPK(String appVersion,String Feilpath) {
+//        //1.检查SD卡是否挂载上
+//
+//        //3.发送请求，获取指定APK，放置到指定位置
+//        RequestParams params = new RequestParams(URL+"isUpdate");
+//        params.addParameter("userAccount", "11000");
+//        params.addParameter("appVersion", "0");
+////        params.setSaveFilePath(path);
+//        //4.发送请求，传送参数(要下载的apk文件的url，下载成功后存储位置，回调函数)
+//
+//        Callback.Cancelable post =
+//                x.http().post(params, new Callback.ProgressCallback<String>() {
+//
+//                    @Override
+//
+//                    public void onSuccess(String result) {
+//                        installAPK(path);
+//                    }
+//
+//                    @Override
+//
+//                    public void onError(Throwable ex, boolean isOnCallback) {
+//                        //下载失败
+//                        Log.d(TAG, "下载失败");
+//                    }
+//
+//                    @Override
+//
+//                    public void onCancelled(CancelledException cex) {
+//
+//                    }
+//
+//                    @Override
+//
+//                    public void onFinished() {
+//                    }
+//
+//                    @Override
+//
+//                    public void onWaiting() {
+//
+//                    }
+//
+//                    @Override
+//
+//                    public void onStarted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoading(long total, long current, boolean isDownloading) {
+//                        //文件下载时回调的方法
+//
+//                        Log.i("xxxxxxxxxxxxx", "current<<" + current + "total<<" + total);
+//                    }
+//                });
+//    }
 
 
-    /**
-     * 开启安装APK页面的逻辑
-     *
-     */
-    private void installAPK(String downAPKurl) {
-        RequestParams params1 = new RequestParams(downAPKurl);
-        params1.setAutoRename(true);//断点下载
-        params1.setSaveFilePath(path);
-        Callback.Cancelable post = x.http().post(params1, new Callback.ProgressCallback<File>() {
-                    @Override
-                    public void onSuccess(File result) {
-                        Log.d(TAG, "aaaaaaaaaaaaaa下载成功result"+result);
-                        //系统应用界面，安装apk入口，看源码
-                        Intent intent = new Intent("android.intent.action.VIEW");
-                        intent.addCategory("android.intent.category.DEFAULT");
-//        intent.setData(Uri.fromFile(file));
-//        intent.setType("application/vnd.android.package-archive");
 
-                        //切记当要同时配Data和Type时一定要用这个方法，否则会出错
-                        intent.setDataAndType(Uri.fromFile(new File(path)),"application/vnd.android.package-archive");
-                        startActivityForResult(intent,0);
-
-                    }
-
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
-                    public void onFinished() {
-
-                    }
-
-                    @Override
-                    public void onWaiting() {
-
-                    }
-
-                    @Override
-                    public void onStarted() {
-
-                    }
-
-                    @Override
-                    public void onLoading(long total, long current, boolean isDownloading) {
-
-                    }
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.fromFile(new File( Environment.getExternalStorageDirectory().getAbsolutePath()
-//                        + File.separator + "rzxt.apk")),
-//                "application/vnd.android.package-archive");
-//        startActivity(intent);
-    });
-    }
+//
+//    /**
+//     * 开启安装APK页面的逻辑
+//     *
+//     */
+//    private void installAPK(String downAPKurl) {
+//        RequestParams params1 = new RequestParams(downAPKurl);
+//        params1.setAutoRename(true);//断点下载
+//        params1.setSaveFilePath(path);
+//        Callback.Cancelable post = x.http().post(params1, new Callback.ProgressCallback<File>() {
+//                    @Override
+//                    public void onSuccess(File result) {
+//                        Log.d(TAG, "aaaaaaaaaaaaaa下载成功result"+result);
+//                        //系统应用界面，安装apk入口，看源码
+//                        Intent intent = new Intent("android.intent.action.VIEW");
+//                        intent.addCategory("android.intent.category.DEFAULT");
+////        intent.setData(Uri.fromFile(file));
+////        intent.setType("application/vnd.android.package-archive");
+//
+//                        //切记当要同时配Data和Type时一定要用这个方法，否则会出错
+//                        intent.setDataAndType(Uri.fromFile(new File(path)),"application/vnd.android.package-archive");
+//                        startActivityForResult(intent,0);
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable ex, boolean isOnCallback) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(CancelledException cex) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onFinished() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onWaiting() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onStarted() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onLoading(long total, long current, boolean isDownloading) {
+//
+//                    }
+////        Intent intent = new Intent(Intent.ACTION_VIEW);
+////        intent.setDataAndType(Uri.fromFile(new File( Environment.getExternalStorageDirectory().getAbsolutePath()
+////                        + File.separator + "rzxt.apk")),
+////                "application/vnd.android.package-archive");
+////        startActivity(intent);
+//    });
+//    }
 //创建SD文件夹
 
 //    public  File createSDDir(String dirName) throws IOException {
@@ -416,11 +417,16 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
     /**
      * 下载更新,
      */
+    //http://172.16.10.242:8080/MVNFHM/appInterface/isUpdate?userAccount=11000&appVersion=0
     protected void checkUpdate() {
         // TODO Auto-generated method stub
         proDialogShow(getActivity(), "正在查询...");
-        RequestParams params = new RequestParams(URL+"appCheckUpdate");
+        RequestParams params = new RequestParams(URL+"/MVNFHM/appInterface/appCheckUpdate");
+        params.addBodyParameter("userAccount", userAccount);
+        params.addBodyParameter("appVersion", nowVersion);
+        Log.i(TAG,params+"");
         x.http().get(params, new Callback.CommonCallback<String>() {
+
 
             @Override
             public void onCancelled(CancelledException arg0) {
@@ -444,26 +450,34 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
             public void onSuccess(String arg0) {
                 // TODO Auto-generated method stub
                 PDialogHide();
-                try {
-                    JSONObject object = new JSONObject(arg0);
-//                    boolean success = object.getBoolean("succss");
-//                    if (success) {
-                        String desc = object.getString("desc");
-//                    172.16.10.242:8080/MVNFHM//appInterface/downRZXT
-//                        String downloadurl = object.getString("downloadurl");
-                    String downloadurl = object.getString("downloadurl");
-                        String versionname = object.getString("versionname");
-                        if (nowVersion.equals(versionname)) {
+//                try {
+//                    JSONObject object = new JSONObject(arg0);
+////                    boolean success = object.getBoolean("succss");
+////                    if (success) {
+//                        String desc = object.getString("desc");
+////                    172.16.10.242:8080/MVNFHM//appInterface/downRZXT
+////                        String downloadurl = object.getString("downloadurl");
+//                    String downloadurl = object.getString("downloadurl");
+//                        String versionname = object.getString("versionname");
+//                        if (nowVersion.equals(versionname)) {
+//                            Log.i(TAG,"当前版本为最新，不用更新");
+//                        } else {
+//                            // 不同，弹出更新提示对话框
+//                            setUpDialog(versionname, downloadurl, desc);
+////                        }
+//                    }
+//                } catch (JSONException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+                if (arg0.equals("002")) {
+                    Toast.makeText(getActivity(),"当前版本为最新版本",Toast.LENGTH_SHORT).show();
                             Log.i(TAG,"当前版本为最新，不用更新");
                         } else {
                             // 不同，弹出更新提示对话框
-                            setUpDialog(versionname, downloadurl, desc);
+                            setUpDialog(nowVersion, arg0, "最新版");
 //                        }
                     }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
             }
         });
     }
@@ -506,7 +520,9 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
         // TODO Auto-generated method stub
         RequestParams params = new RequestParams(downloadurl);
         params.setAutoRename(true);//断点下载
-        params.setSaveFilePath("/mnt/sdcard/rzxt.apk");
+
+//        params.setSaveFilePath("/mnt/sdcard/rzxt.apk");
+        params.setSaveFilePath(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/rzxt.apk");
         x.http().get(params, new Callback.ProgressCallback<File>() {
 
             @Override
@@ -538,8 +554,7 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
                 }
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.fromFile(new File(Environment
-                                .getExternalStorageDirectory(), "rzxt.apk")),
+                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/", "rzxt.apk")),
                         "application/vnd.android.package-archive");
                 startActivity(intent);
             }
@@ -590,6 +605,7 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
     @Override
     public void onResume() {
         URL = "http://"+sharedPrefs.getString("CONNECT_IP", "null")+":"+sharedPrefs.getString("CONNECT_PORT", "null");
+        userAccount=sharedPrefs.getString("USER_ACCOUNT", "null");
         super.onResume();
     }
 }

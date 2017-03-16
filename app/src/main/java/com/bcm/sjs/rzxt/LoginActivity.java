@@ -224,7 +224,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             task.task_mt_id = bean.getTASK_MT_ID();
                             //任务备注
                             task.task_note = bean.getTASK_NOTE();
-
+                            //申请号
+                            task.apply_id = bean.getAPPLY_ID();
                             TaskPro repo = new TaskPro(context);
                             if (repo.getNo(bean.getTASK_NO())) {
                                 repo.update(task);
@@ -247,8 +248,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 media.mt_name = bean.getMT_NAME();
                                 //模板项目信息
                                 media.mt_item_info = bean.getMT_ITEM_INFO();
-                                //                        //模板上传照片数量
-                                media.mt_u_desc = bean.getMT_U_DESC();
+                               //模板上传照片数量
+//                                media.mt_u_7_desc = bean.getMT_U_7_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_8_desc = bean.getMT_U_8_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_9_desc = bean.getMT_U_9_DESC();
                                 //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
                                 media.mt_d_desc = bean.getMT_D_DESC();
 
@@ -330,16 +335,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     /**
      * 下载更新,
      */
+    //http://172.16.10.242:8080/MVNFHM/appInterface/isUpdate?userAccount=11000&appVersion=0
     protected void checkUpdate() {
         // TODO Auto-generated method stub
         proDialogShow(LoginActivity.this, "正在查询...");
-        RequestParams params = new RequestParams("url");
+        RequestParams params = new RequestParams(URL+"/MVNFHM/appInterface/appCheckUpdate");
+        params.addBodyParameter("userAccount", ACC);
+        params.addBodyParameter("appVersion", nowVersion);
+        Log.i(TAG,params+"");
         x.http().get(params, new Callback.CommonCallback<String>() {
+
 
             @Override
             public void onCancelled(CancelledException arg0) {
                 // TODO Auto-generated method stub
-
             }
 
             @Override
@@ -359,23 +368,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onSuccess(String arg0) {
                 // TODO Auto-generated method stub
                 PDialogHide();
-                try {
-                    JSONObject object = new JSONObject(arg0);
-                    boolean success = object.getBoolean("succee");
-                    if (success) {
-                        String desc = object.getString("desc");
-                        String downloadurl = object.getString("downloadurl");
-                        String versionname = object.getString("versionname");
-                        if (nowVersion.equals(versionname)) {
-                            System.out.println("当前版本为最新，不用跟新");
-                        } else {
-                            // 不同，弹出更新提示对话框
-                            setUpDialog(versionname, downloadurl, desc);
-                        }
-                    }
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+//                try {
+//                    JSONObject object = new JSONObject(arg0);
+////                    boolean success = object.getBoolean("succss");
+////                    if (success) {
+//                        String desc = object.getString("desc");
+////                    172.16.10.242:8080/MVNFHM//appInterface/downRZXT
+////                        String downloadurl = object.getString("downloadurl");
+//                    String downloadurl = object.getString("downloadurl");
+//                        String versionname = object.getString("versionname");
+//                        if (nowVersion.equals(versionname)) {
+//                            Log.i(TAG,"当前版本为最新，不用更新");
+//                        } else {
+//                            // 不同，弹出更新提示对话框
+//                            setUpDialog(versionname, downloadurl, desc);
+////                        }
+//                    }
+//                } catch (JSONException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+                if (arg0.equals("002")) {
+                    Toast.makeText(LoginActivity.this,"当前版本为最新版本",Toast.LENGTH_SHORT).show();
+                    Log.i(TAG,"当前版本为最新，不用更新");
+                } else {
+                    // 不同，弹出更新提示对话框
+                    setUpDialog(nowVersion, arg0, "最新版");
+//                        }
                 }
             }
         });
@@ -393,7 +412,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void setUpDialog(String versionname, final String downloadurl,
                                String desc) {
         // TODO Auto-generated method stub
-        AlertDialog dialog = new AlertDialog.Builder(this).setCancelable(false)
+        AlertDialog dialog = new AlertDialog.Builder(LoginActivity.this).setCancelable(false)
                 .setTitle("下载" + versionname + "版本").setMessage(desc)
                 .setNegativeButton("取消", null)
                 .setPositiveButton("下载", new DialogInterface.OnClickListener() {
@@ -419,7 +438,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // TODO Auto-generated method stub
         RequestParams params = new RequestParams(downloadurl);
         params.setAutoRename(true);//断点下载
-        params.setSaveFilePath("/mnt/sdcard/demo.apk");
+
+//        params.setSaveFilePath("/mnt/sdcard/rzxt.apk");
+        params.setSaveFilePath(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/rzxt.apk");
         x.http().get(params, new Callback.ProgressCallback<File>() {
 
             @Override
@@ -451,8 +472,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setDataAndType(Uri.fromFile(new File(Environment
-                                .getExternalStorageDirectory(), "demo.apk")),
+                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator +"RZXT/", "rzxt.apk")),
                         "application/vnd.android.package-archive");
                 startActivity(intent);
             }
@@ -499,6 +519,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
+
     @Override
     protected void onRestart() {
         super.onRestart();

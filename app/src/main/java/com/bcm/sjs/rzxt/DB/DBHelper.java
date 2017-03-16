@@ -81,7 +81,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 +MEDIA.MT_NO+" TEXT,"
                 +MEDIA.MT_NAME+" TEXT, "
                 +MEDIA.MT_ITEM_INFO+" TEXT, "
-                +MEDIA.MT_U_DESC+" TEXT, "
+                +MEDIA.MT_U_7_DESC+" TEXT, "
+                +MEDIA.MT_U_8_DESC+" TEXT, "
+                +MEDIA.MT_U_9_DESC+" TEXT, "
                 +MEDIA.MT_D_DESC+" TEXT, "
                 +MEDIA.MT_IS_NOTE+" TEXT, "
                 +MEDIA.MT_STATUS+" TEXT)";

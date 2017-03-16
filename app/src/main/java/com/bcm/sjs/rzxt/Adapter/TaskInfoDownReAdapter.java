@@ -33,6 +33,7 @@ public class TaskInfoDownReAdapter extends RecyclerView.Adapter<TaskInfoDownReAd
     private  String value;
     private String[] DownInfo;
     private String[] type;
+    private String[] name;
     private String task_no;
 //    public ViewHolder mholder;
 
@@ -168,8 +169,9 @@ public class TaskInfoDownReAdapter extends RecyclerView.Adapter<TaskInfoDownReAd
                 {
                     int pos = holder.getLayoutPosition();
                     String num = type[1];
+                    name = type[1].split("=");
                     Log.i(TAG,"String num ="+num);
-                    mOnItemClickLitener.onItemClick(holder.itemView, pos,num);
+                    mOnItemClickLitener.onItemClick(holder.itemView, pos,name[0],name[1]);
                 }
             });
 
@@ -249,8 +251,8 @@ public class TaskInfoDownReAdapter extends RecyclerView.Adapter<TaskInfoDownReAd
 
     public interface OnItemClickLitener
     {
-        void onItemClick(View view, int position, String numm);
-        void onItemLongClick(View view, int position, String numm);
+        void onItemClick(View view, int position, String numm,String path);
+        void onItemLongClick(View view, int position, String numm,String path);
     }
 
     private OnItemClickLitener mOnItemClickLitener;
