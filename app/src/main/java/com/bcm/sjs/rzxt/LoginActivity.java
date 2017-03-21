@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         imBtn_IP_Edit.setOnClickListener(this);
         btn_Login.setOnClickListener(this);
-        checkUpdate();
+//        checkUpdate();
         try {
             PackageInfo packageInfo = getPackageManager().getPackageInfo(
                     getPackageName(), 0);

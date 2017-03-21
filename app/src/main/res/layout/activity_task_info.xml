@@ -78,7 +78,6 @@
         android:text="@string/save"
         android:paddingLeft="100dp"
         android:paddingRight="100dp"
-        android:textSize="12dp"
         android:textColor="@color/textColorWhite"
         android:background="@drawable/touch_uploadbtn_bg"
         />

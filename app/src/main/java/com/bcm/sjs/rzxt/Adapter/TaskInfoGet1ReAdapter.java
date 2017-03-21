@@ -35,7 +35,7 @@ public class TaskInfoGet1ReAdapter extends RecyclerView.Adapter<TaskInfoGet1ReAd
     private  String value;
     private String[] oneGetInfo;
     private String[] type;
-    private String[] name;
+//    private String[] name;
     //    private ViewHolder mholder;
     private String task_no;
     private  Context mContext;
@@ -127,7 +127,7 @@ public class TaskInfoGet1ReAdapter extends RecyclerView.Adapter<TaskInfoGet1ReAd
                 public void onClick(View v)
                 {
                     int pos = holder.getLayoutPosition();
-                    int poss=pos+1;
+//                    int poss=pos+1;
 //                    if(poss==oneGetInfo.length){
 //                        MediaPro pro = new MediaPro(mContext);
 //                        medialist.mt_u_8_desc=value+"%"+type[0]+"@"+poss+".JPG";
@@ -145,9 +145,10 @@ public class TaskInfoGet1ReAdapter extends RecyclerView.Adapter<TaskInfoGet1ReAd
                 @Override
                 public boolean onLongClick(View v)
                 {
-//                    int pos = holder.getLayoutPosition();
-//                    String num = mGoodsList.get(pos).get("goodsNum");
-//                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos,num);
+                    int pos = holder.getLayoutPosition();
+                    type= oneGetInfo[pos].split("@");
+                    String name = type[0];
+                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos,name);
                     return false;
                 }
             });

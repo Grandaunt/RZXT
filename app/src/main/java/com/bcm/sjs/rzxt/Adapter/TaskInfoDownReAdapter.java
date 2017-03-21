@@ -101,60 +101,8 @@ public class TaskInfoDownReAdapter extends RecyclerView.Adapter<TaskInfoDownReAd
         else if(type[0].equals("E")||type[0].equals("e")){
             holder.im.setImageResource(R.mipmap.excle);
         }
-        holder.tv.setText(type[1]);
-////        final String[] DownInfo = new String[0];
-////        String value= medialist.mt_d_im_desc;
-////        String[] arrayIM = value.split(",");
-////        value= medialist.mt_d_w_desc;
-////        String[] arrayW = value.split(",");
-////        value= medialist.mt_d_p_desc;
-////        String[] arrayP = value.split(",");
-////        value= medialist.mt_d_e_desc;
-////        String[] arrayE = value.split(",");
-//
-//        if(position>=0&&position<arrayIM.length){
-//             holder.im.setImageResource(R.mipmap.im);
-//        }
-//        else  if(position>=arrayIM.length&&position<arrayIM.length+arrayW.length){
-//            holder.im.setImageResource(R.mipmap.word);
-//        }
-//        else  if(position>=arrayIM.length+arrayW.length&&position<arrayIM.length+arrayW.length+arrayP.length){
-//            holder.im.setImageResource(R.mipmap.pdf);
-//        }
-//        else  if(position>=arrayIM.length+arrayW.length+arrayP.length&&position<arrayIM.length+arrayW.length+arrayP.length+arrayE.length){
-//            holder.im.setImageResource(R.mipmap.excle);
-//        }
-//        int j=0;
-////        int leng = arrayIM.length+arrayW.length+arrayP.length+arrayE.length;
-//        for(int i=0;i< arrayIM.length;i++ ,j++){
-//            DownInfo[j]=arrayIM[i];
-//        }
-//        for(int i=0;i< arrayW.length;i++ ,j++){
-//            DownInfo[j]=arrayW[i];
-//        }
-//        for(int i=0;i< arrayP.length;i++ ,j++){
-//            DownInfo[j]=arrayP[i];
-//        }
-//        for(int i=0;i< arrayE.length;i++ ,j++){
-//            DownInfo[j]=arrayE[i];
-//        }
-//       holder.tv.setText(DownInfo[position]);
-////        holder.item_tv.setText(mTitles[position]);
-////        holder.tv.setText(mDatas.get(position));
-////        holder.imGoods.setImageResource(mTitles[position]);
-//         decimalFormat=new DecimalFormat(".00");
-//        //构造方法的字符格式这里如果小数不足2位,会以0补足.
-//        imageUrl ="http://123.57.29.113:8080/sell/static/uploadFiles/uploadImgs/"+mGoodsList.get(position).get("goodsImage");
-//        Log.i(TAG,"imageUrl="+imageUrl);
-////        "http://172.16.11.124:8080/MVNFHM/uploadFiles/uploadImgs/20170209/d9205a29278644fdbe6b37421bab17bb.png";
-//        number = Integer.parseInt(mGoodsList.get(position).get("goodsNumber"));
-//        sumPrice = Float.parseFloat(mGoodsList.get(position).get("goodsPrice"));
-//        Log.i(TAG,"goodsPrice*number="+sumPrice+"*"+number+"="+sumPrice*number);
-//        sumPrice = sumPrice*number;
-//
-//        holder.tvGoodsName.setText(mGoodsList.get(position).get("goodsName"));
-////        holder.tvGoodsNumber.setText(mGoodsList.get(position).get("goodsNumber"));
-//        holder.tvGoodsSumPrice.setText(decimalFormat.format(sumPrice));
+        name = type[1].split("=");
+        holder.tv.setText(name[0]);
 
         // 如果设置了回调，则设置点击事件
 
@@ -168,6 +116,7 @@ public class TaskInfoDownReAdapter extends RecyclerView.Adapter<TaskInfoDownReAd
                 public void onClick(View v)
                 {
                     int pos = holder.getLayoutPosition();
+                    type= DownInfo[pos].split("@");
                     String num = type[1];
                     name = type[1].split("=");
                     Log.i(TAG,"String num ="+num);

@@ -34,6 +34,7 @@ import com.bcm.sjs.rzxt.Adapter.TaskInfoGet3ReAdapter;
 import com.bcm.sjs.rzxt.DB.MEDIA;
 import com.bcm.sjs.rzxt.DB.MediaPro;
 import com.bcm.sjs.rzxt.DB.ServerBean;
+import com.bcm.sjs.rzxt.DB.TASK;
 import com.bcm.sjs.rzxt.DB.TaskPro;
 import com.bcm.sjs.rzxt.Utils.FileUtils;
 import com.bcm.sjs.rzxt.view.ActionSheetDialog;
@@ -276,68 +277,95 @@ public class TaskInfoActivity extends AppCompatActivity {
             {Dposition=position;
              Dname=name;
              DdownPath=downPath;
-                new ActionSheetDialog(TaskInfoActivity.this).builder()
-                        .setCanceledOnTouchOutside(true)
-                        .addSheetItem("下载", ActionSheetDialog.SheetItemColor.DEFAULT,
-                                new ActionSheetDialog.OnSheetItemClickListener() {
-                                    @Override
-                                    public void onClick(int which) {
-                                        Log.i(TAG,"ActionSheetDialog文件下载");
-                                        String path= Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/";
-                                        if(!FileUtils.isFileExist(path)){
-                                            try {
-                                                File file= FileUtils.createSDDir(path);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
+                String path= Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/";
+                if(!FileUtils.isFileExist(path)){
+                    try {
+                        File file= FileUtils.createSDDir(path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                                       downloadFile(URL+"/MVNFHM/appInterface/appDownFile",Dname,path,DdownPath);
-                                    }
-                                })
-                        .addSheetItem("查看", ActionSheetDialog.SheetItemColor.DEFAULT,
-                                new ActionSheetDialog.OnSheetItemClickListener() {
-                                    @Override
-                                    public void onClick(int which) {
-                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath()
-                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/num";
+                }
+                String cpath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/"+Dname;
+                Log.i(TAG,"cpath="+cpath);
 //                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
 //                                                + "Download/qqmail/";
-                                        if(!FileUtils.isFileExist(cpath)){
-                                            Toast.makeText(TaskInfoActivity.this,"本地无该文件",Toast.LENGTH_SHORT).show();
-                                        }
-                                        else{
-                                            /***
-                                             * 一、music：
-
-                                             String file_type = "audio/*";
-
-
-                                             二、movice：
-
-                                             String file_type = "video/*";
-
-
-                                             三、pdf：
-
-                                             String file_type = "application/*";
-
-
-                                             四、picture：
-
-                                             String file_type = "image/*";
-                                             */
-                                            Uri uri = Uri.parse(cpath);
-//                                            Uri uri = Uri.parse(cpath+"面试通知（北京）");//调用系统自带的播放器
-//                    Uri uri = Uri.parse("sdcard/VideoRecorderTest/"+FileToStr(videoList)[position]);//调用系统自带的播放器
-                                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                                            intent.setDataAndType(uri, "*/*");
-                                            startActivity(intent);
-                                        }
-                                        Log.i(TAG,"ActionSheetDialog查看");
-                                    }
-                                }).show();
+                if(!FileUtils.isFileExist(cpath)){
+                    downloadFile(URL+"/MVNFHM/appInterface/appDownFile",Dname,path,DdownPath);
+//                    Toast.makeText(TaskInfoActivity.this,"本地无该文件",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Uri uri = Uri.parse(cpath);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "*/*");
+                    startActivity(intent);
+                }
+                Log.i(TAG,"ActionSheetDialog查看");
+//                new ActionSheetDialog(TaskInfoActivity.this).builder()
+//                        .setCanceledOnTouchOutside(true)
+//                        .addSheetItem("下载", ActionSheetDialog.SheetItemColor.DEFAULT,
+//                                new ActionSheetDialog.OnSheetItemClickListener() {
+//                                    @Override
+//                                    public void onClick(int which) {
+//                                        Log.i(TAG,"ActionSheetDialog文件下载");
+//                                        String path= Environment.getExternalStorageDirectory().getAbsolutePath()
+//                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/";
+//                                        if(!FileUtils.isFileExist(path)){
+//                                            try {
+//                                                File file= FileUtils.createSDDir(path);
+//                                            } catch (IOException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                        }
+//
+//                                       downloadFile(URL+"/MVNFHM/appInterface/appDownFile",Dname,path,DdownPath);
+//                                    }
+//                                })
+//                        .addSheetItem("查看", ActionSheetDialog.SheetItemColor.DEFAULT,
+//                                new ActionSheetDialog.OnSheetItemClickListener() {
+//                                    @Override
+//                                    public void onClick(int which) {
+//                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath()
+//                                                + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/"+Dname;
+//                                        Log.i(TAG,"cpath="+cpath);
+////                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+////                                                + "Download/qqmail/";
+//                                        if(!FileUtils.isFileExist(cpath)){
+//                                            Toast.makeText(TaskInfoActivity.this,"本地无该文件",Toast.LENGTH_SHORT).show();
+//                                        }
+//                                        else{
+//                                            /***
+//                                             * 一、music：
+//
+//                                             String file_type = "audio/*";
+//
+//
+//                                             二、movice：
+//
+//                                             String file_type = "video/*";
+//
+//
+//                                             三、pdf：
+//
+//                                             String file_type = "application/*";
+//
+//
+//                                             四、picture：
+//
+//                                             String file_type = "image/*";
+//                                             */
+//                                            Uri uri = Uri.parse(cpath);
+////                                            Uri uri = Uri.parse(cpath+"面试通知（北京）");//调用系统自带的播放器
+////                    Uri uri = Uri.parse("sdcard/VideoRecorderTest/"+FileToStr(videoList)[position]);//调用系统自带的播放器
+//                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                            intent.setDataAndType(uri, "*/*");
+//                                            startActivity(intent);
+//                                        }
+//                                        Log.i(TAG,"ActionSheetDialog查看");
+//                                    }
+//                                }).show();
             }
 
             @Override
@@ -407,8 +435,10 @@ public class TaskInfoActivity extends AppCompatActivity {
                 PhotoInfo ptinfo = new PhotoInfo();
                 Log.i(TAG,"461 mPhotoname ="+mPhotoname);
                 ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+type + mPhotoname+ ".JPG");
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+num+"/" + mPhotoname+".JPG");
                 //mPhotoname=0@qwe
+                Log.i(TAG,Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+ num+"/" + mPhotoname+".JPG");
                 List<PhotoInfo> PhotoList= new ArrayList<>();
                 PhotoList.add(0, ptinfo);
 
@@ -475,8 +505,10 @@ public class TaskInfoActivity extends AppCompatActivity {
                 PhotoInfo ptinfo = new PhotoInfo();
                 Log.i(TAG,"461 mPhotoname ="+mPhotoname);
                 ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+type + mPhotoname+ ".JPG");
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+num+"/" + mPhotoname+".JPG");
                 //mPhotoname=0@qwe
+                Log.i(TAG,Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+ num+"/" + mPhotoname+".JPG");
                 List<PhotoInfo> PhotoList= new ArrayList<>();
                 PhotoList.add(0, ptinfo);
 
@@ -542,12 +574,13 @@ public class TaskInfoActivity extends AppCompatActivity {
             @Override
             public void onItemLongClick(View view, int position,String num)
             {
-
                 PhotoInfo ptinfo = new PhotoInfo();
-                Log.i(TAG,"532 mPhotoname ="+mPhotoname);
+                Log.i(TAG,"461 mPhotoname ="+mPhotoname);
                 ptinfo.setPhotoPath( Environment.getExternalStorageDirectory().getAbsolutePath()
-                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/" +type+ mPhotoname+ ".JPG");
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+num+"/" + mPhotoname+".JPG");
                 //mPhotoname=0@qwe
+                Log.i(TAG,Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Get/"+ num+"/" + mPhotoname+".JPG");
                 List<PhotoInfo> PhotoList= new ArrayList<>();
                 PhotoList.add(0, ptinfo);
 
@@ -564,15 +597,18 @@ public class TaskInfoActivity extends AppCompatActivity {
         requestParams.addParameter("AUTH_TOKEN", AUTH_TOKEN);
         requestParams.addParameter("FILE_NAME", name);
         requestParams.addParameter("FILE_PATH", downPath);
-        requestParams.setSaveFilePath(Filepath);
+        requestParams.setSaveFilePath(Filepath+name);
         Log.i(TAG,"requestParams="+requestParams);
+        Log.i(TAG,"Filepath+name="+Filepath+name);
         x.http().get(requestParams, new Callback.ProgressCallback<File>() {
             @Override
             public void onWaiting() {
+
             }
 
             @Override
             public void onStarted() {
+
             }
 
             @Override
@@ -586,7 +622,45 @@ public class TaskInfoActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(File result) {
-                Toast.makeText(TaskInfoActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
+                String cpath = Environment.getExternalStorageDirectory().getAbsolutePath()
+                        + File.separator +"RZXT/"+userAcc+"/"+task_no+"/Down/"+Dname;
+                Log.i(TAG,"cpath="+cpath);
+                Log.i(TAG,"result="+result);
+//                                        String cpath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+//                                                + "Download/qqmail/";
+                if(!FileUtils.isFileExist(cpath)){
+                    Toast.makeText(TaskInfoActivity.this,"下载失败",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    /***
+                     * 一、music：
+
+                     String file_type = "audio/*";
+
+
+                     二、movice：
+
+                     String file_type = "video/*";
+
+
+                     三、pdf：
+
+                     String file_type = "application/*";
+
+
+                     四、picture：
+
+                     String file_type = "image/*";
+                     */
+                    Toast.makeText(TaskInfoActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
+                    Uri uri = Uri.parse(cpath);
+//                                            Uri uri = Uri.parse(cpath+"面试通知（北京）");//调用系统自带的播放器
+//                    Uri uri = Uri.parse("sdcard/VideoRecorderTest/"+FileToStr(videoList)[position]);//调用系统自带的播放器
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setDataAndType(uri, "*/*");
+                    startActivity(intent);
+                }
+
                 progressDialog.dismiss();
             }
 
@@ -599,10 +673,12 @@ public class TaskInfoActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(Callback.CancelledException cex) {
+                Toast.makeText(TaskInfoActivity.this, "下载失败，请检查网络和SD卡", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFinished() {
+
             }
         });
     }
@@ -677,20 +753,25 @@ public class TaskInfoActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void onCancelled(CancelledException cex) {
-
+                        if(UpDialog!=null && UpDialog.isShowing()){
+                            UpDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void onFinished() {
                         Log.i(TAG,"uploadi="+uploadi);
                        if(uploadi==sumLeng){
-                           mMedialist.mt_status=2+"";
-                           String okstr =mediapro.UpdateStatus(mMedialist);
+
+                           TaskPro pro= new TaskPro(TaskInfoActivity.this);
+                           String okstr =pro.updateStatus(task_no,"2");
                            Log.i(TAG,"okstr="+okstr);
                     }
                       Intent intent = new Intent(TaskInfoActivity.this,MainActivity.class);
@@ -699,6 +780,10 @@ public class TaskInfoActivity extends AppCompatActivity {
                 });
 
             } else {
+                if(UpDialog!=null && UpDialog.isShowing()){
+                    UpDialog.dismiss();
+                }
+                Toast.makeText(TaskInfoActivity.this,"照片上传失败，不存在",Toast.LENGTH_SHORT).show();
                 Log.i(TAG, path + "照片上传失败，不存在");
             }
         }
@@ -786,6 +871,10 @@ public class TaskInfoActivity extends AppCompatActivity {
                 });
 
             } else {
+                if(UpDialog!=null && UpDialog.isShowing()){
+                    UpDialog.dismiss();
+                }
+                Toast.makeText(TaskInfoActivity.this,"照片上传失败，不存在",Toast.LENGTH_SHORT).show();
                 Log.i(TAG, path + "照片上传失败，不存在");
             }
         }
@@ -874,6 +963,10 @@ public class TaskInfoActivity extends AppCompatActivity {
                 });
 
             } else {
+                if(UpDialog!=null && UpDialog.isShowing()){
+                    UpDialog.dismiss();
+                }
+                Toast.makeText(TaskInfoActivity.this,"照片上传失败，不存在",Toast.LENGTH_SHORT).show();
                 Log.i(TAG, path + "照片上传失败，不存在");
             }
         }

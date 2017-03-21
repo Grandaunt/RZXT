@@ -333,7 +333,108 @@ public class TaskPro {
 
 
     }
+    public String updateStatus(String task_no,String status){
+        Log.i(TAG,"update………………………………………………………………");
+        SQLiteDatabase db= dbHelper.getWritableDatabase();
+        ContentValues values=new ContentValues();
 
+        //记录主键
+//        values.put(TASK.TASK_ID,task.task_id);
+        //任务编号
+        values.put(TASK.TASK_NO,task_no);
+//        //任务类型
+//        values.put(TASK.TASK_TYPE,task.task_type);
+//        //任务状态
+        values.put(TASK.TASK_STATUS,status);
+//        //初期资料是否齐全
+//        values.put(TASK.TASK_IS_EARLY_FILE,task.task_is_early_file);
+//
+//
+//        //检查机构代码
+//        values.put(TASK.TASK_CHECK_ORG_NO,task.task_check_org_no);
+//        //检查机构名称
+//        values.put(TASK.TASK_CHECK_ORG_NAME,task.task_check_org_name);
+//        //检查类型(首次检查、定期检查、不定期检查)
+//        values.put(TASK.TASK_CHECK_TYPE,task.task_check_type);
+//        //检查选项(按合同检查)
+//        values.put(TASK.TASK_CHECK_OPTION,task.task_check_option);
+//        //任务检查人账号
+//        values.put(TASK.TASK_INER_ACC,task.task_iner_acc);
+//
+//
+//        //任务检查人姓名
+//        values.put(TASK.TASK_INER_NAME,task.task_iner_name);
+//        //任务开始日期
+//        values.put(TASK.TASK_START_DATE,task.task_start_date);
+//        //任务截止日期
+//        values.put(TASK.TASK_END_DATE,task.task_end_date);
+//        //任务完成日期
+//        values.put(TASK.TASK_FINISH_DATE,task.task_finish_date);
+//        //审核人账号
+//        values.put(TASK.TASK_AUDIT_ACC,task.task_audit_acc);
+//
+//
+//        //审核人姓名
+//        values.put(TASK.TASK_AUDIT_NAME,task.task_audit_name);
+//        //申请公司编号
+//        values.put(TASK.TASK_COM_NO,task.task_com_no);
+//        //申请公司名称
+//        values.put(TASK.TASK_COM_NAME,task.task_com_name);
+//        //申请合同编号
+//        values.put(TASK.TASK_CON_NO,task.task_con_no);
+//        //申请项目编号
+//        values.put(TASK.TASK_ITEN_NO,task.task_item_no);
+//
+//
+//        //申请产品编号
+//        values.put(TASK.TASK_PRDT_NO,task.task_prdt_no);
+//        //申请产品名称
+//        values.put(TASK.TASK_PRDT_NAME,task.task_prdt_name);
+//        //申请生产类型
+//        values.put(TASK.TASK_PRDT_TYPE,task.task_prdt_type);
+//        //申请认证范围
+//        values.put(TASK.TASK_RZ_SCOPE,task.task_rz_scope);
+//        //申请认证类型
+//        values.put(TASK.TASK_RZ_TYPE,task.task_rz_type);
+//
+//        //申请公司地址
+//        values.put(TASK.TASK_COM_ADDR,task.task_com_addr);
+//        //申请公司电话
+//        values.put(TASK.TASK_COM_TEL,task.task_com_tel);
+//        //申请公司邮编
+//        values.put(TASK.TASK_COM_POST_CODE,task.task_com_post_code);
+//        //申请公司邮箱
+//        values.put(TASK.TASK_COM_EMAIL,task.task_com_email);
+//        //申请公司传真
+//        values.put(TASK.TASK_COM_FAX,task.task_com_fax);
+//
+//
+//        //申请公司网络url
+//        values.put(TASK.TASK_WEB_URL,task.task_web_url);
+//        //公司联系人姓名
+//        values.put(TASK.TASK_COM_CON_NAME,task.task_com_con_name);
+//        //公司联系人电话
+//        values.put(TASK.TASK_COM_CON_TEL,task.task_com_con_tel);
+//        //公司联系人职位
+//        values.put(TASK.TASK_COM_CON_IDE,task.task_com_con_ide);
+//        //申请产品介绍
+//        values.put(TASK.TASK_ITEM_INFO,task.task_item_info);
+//
+//
+//        //信息采集模板ID
+//        values.put(TASK.TASK_MT_ID,task.task_mt_id);
+//        //任务备注
+//        values.put(TASK.TASK_NOTE,task_note);
+        //申请单号
+//        values.put(TASK.APPLY_ID,task.apply_id);
+
+        db.update(TASK.TABLE,values,TASK.TASK_NO+"=?",new String[] { String.valueOf(task_no) });
+        db.close();
+        return status;
+
+
+
+    }
     //查询该num编号的下载信息
     public MEDIA  getMedialistDown(String num){
         SQLiteDatabase db= dbHelper.getWritableDatabase();

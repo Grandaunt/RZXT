@@ -145,9 +145,10 @@ public class TaskInfoGet2ReAdapter extends RecyclerView.Adapter<TaskInfoGet2ReAd
                 @Override
                 public boolean onLongClick(View v)
                 {
-//                    int pos = holder.getLayoutPosition();
-//                    String num = mGoodsList.get(pos).get("goodsNum");
-//                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos,num);
+                    int pos = holder.getLayoutPosition();
+                    type= oneGetInfo[pos].split("@");
+                    String name = type[0];
+                    mOnItemClickLitener.onItemLongClick(holder.itemView, pos,name);
                     return false;
                 }
             });
