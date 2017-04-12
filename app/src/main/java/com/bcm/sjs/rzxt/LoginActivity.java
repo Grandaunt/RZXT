@@ -135,8 +135,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Log.i(TAG, "解析成功：" + mag);
 
                     ServerBean.User user = serverBean.getUser();
-                    List<ServerBean.TaskBean> taskbeanList = serverBean.getTaskList();
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putString("AUTH_TOKEN", user.getAUTH_TOKEN());
+                    editor.putString("USER_ACCOUNT", user.getUSER_ACCOUNT());
+                    editor.putString("USER_NAME", user.getUSER_NAME());
+                    editor.putString("USER_IDE", user.getUSER_IDE());
+                    editor.putString("USER_TEL", user.getUSER_TEL());
+                    editor.putString("USER_DEPT_NAME", user.getUSER_DEPT_NAME());
+                    editor.putString("USER_DEPT_ORG_CODE", user.getUSER_DEPT_ORG_CODE());
+                    editor.commit();
+
                     List<ServerBean.MediaBean> mediabeanList = serverBean.getFileList();
+                    if (mediabeanList.size() > 0) {
+                        for (int i = 0; i < mediabeanList.size(); i++) {
+
+                            ServerBean.MediaBean bean = mediabeanList.get(i);
+
+                            MEDIA media = new MEDIA();
+                            //记录主键
+                            media.mt_no = bean.getMT_ID();
+                            //模板名称
+                            media.mt_name = bean.getMT_NAME();
+                            //模板项目信息
+                            media.mt_item_info = bean.getMT_ITEM_INFO();
+                            //模板上传照片数量
+//                                media.mt_u_7_desc = bean.getMT_U_7_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_8_desc = bean.getMT_U_8_DESC();
+//                                //模板上传照片数量
+//                                media.mt_u_9_desc = bean.getMT_U_9_DESC();
+                            //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
+                            media.mt_d_desc = bean.getMT_D_DESC();
+
+                            media.mt_is_note = bean.getMT_IS_NOTE();
+
+
+                            //模板状态
+                            media.mt_status = bean.getMT_STATUS();
+
+                            MediaPro repo1 = new MediaPro(context);
+                            if (repo1.getID(bean.getMT_ID())) {
+                                repo1.update(media);
+                                Log.i(TAG, "media表更新:" + bean.getMT_ID());
+
+
+                            } else {
+                                repo1.insert(media);
+                                Log.i(TAG, "media表插入:" + bean.getMT_ID());
+
+
+                            }
+                        }
+                    }
+                    List<ServerBean.TaskBean> taskbeanList = serverBean.getTaskList();
+
                     Log.i(TAG,"taskbeanList.size()="+taskbeanList.size());
                     Log.i(TAG,"mediabeanList.size()="+mediabeanList.size());
                     if (taskbeanList.size() > 0) {
@@ -236,57 +288,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             }
                         }
                     }
-                        if (mediabeanList.size() > 0) {
-                            for (int i = 0; i < mediabeanList.size(); i++) {
-
-                                ServerBean.MediaBean bean = mediabeanList.get(i);
-
-                                MEDIA media = new MEDIA();
-                                //记录主键
-                                media.mt_no = bean.getMT_ID();
-                                //模板名称
-                                media.mt_name = bean.getMT_NAME();
-                                //模板项目信息
-                                media.mt_item_info = bean.getMT_ITEM_INFO();
-                               //模板上传照片数量
-//                                media.mt_u_7_desc = bean.getMT_U_7_DESC();
-//                                //模板上传照片数量
-//                                media.mt_u_8_desc = bean.getMT_U_8_DESC();
-//                                //模板上传照片数量
-//                                media.mt_u_9_desc = bean.getMT_U_9_DESC();
-                                //模板上传照片描述Im:aaa;im:bbb;im:ccc;im:ddd;w:eee;p:kkk;e:lll
-                                media.mt_d_desc = bean.getMT_D_DESC();
-
-                                media.mt_is_note = bean.getMT_IS_NOTE();
 
 
-                                //模板状态
-                                media.mt_status = bean.getMT_STATUS();
 
-                                MediaPro repo1 = new MediaPro(context);
-                                if (repo1.getID(bean.getMT_ID())) {
-                                    repo1.update(media);
-                                    Log.i(TAG, "media表更新:" + bean.getMT_ID());
-
-
-                                } else {
-                                    repo1.insert(media);
-                                    Log.i(TAG, "media表插入:" + bean.getMT_ID());
-
-
-                                }
-                            }
-                        }
-
-                        SharedPreferences.Editor editor = sharedPrefs.edit();
-                        editor.putString("AUTH_TOKEN", user.getAUTH_TOKEN());
-                        editor.putString("USER_ACCOUNT", user.getUSER_ACCOUNT());
-                        editor.putString("USER_NAME", user.getUSER_NAME());
-                        editor.putString("USER_IDE", user.getUSER_IDE());
-                        editor.putString("USER_TEL", user.getUSER_TEL());
-                        editor.putString("USER_DEPT_NAME", user.getUSER_DEPT_NAME());
-                        editor.putString("USER_DEPT_ORG_CODE", user.getUSER_DEPT_ORG_CODE());
-                        editor.commit();
 
 
                         //跳转Activity
@@ -305,11 +309,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.i("LogActivity","onError网络请求错误"+ex);
-//                Toast.makeText(LoginActivity.this, "网络连接", Toast.LENGTH_LONG).show();
-                et_Acc.setText("");
-                et_Password.setText("");
-                Toast.makeText(LoginActivity.this, "请重新登录", Toast.LENGTH_LONG).show();
+//                Log.i("LogActivity","onError网络请求错误"+ex);
+////                Toast.makeText(LoginActivity.this, "网络连接", Toast.LENGTH_LONG).show();
+//                et_Acc.setText("");
+//                et_Password.setText("");
+//                Toast.makeText(LoginActivity.this, "请重新登录", Toast.LENGTH_LONG).show();
             }
 
             @Override

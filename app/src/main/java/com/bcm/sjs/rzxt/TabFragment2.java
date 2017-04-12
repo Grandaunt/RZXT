@@ -200,6 +200,9 @@ public class TabFragment2 extends android.support.v4.app.Fragment implements Vie
                 break;
             //退出
             case R.id.ly_out:
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putString("AUTH_TOKEN","");
+                editor.commit();
                 System.exit(0);
 //                ActivityManager manager = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
 //                manager.restartPackage(getActivity().getPackageName());

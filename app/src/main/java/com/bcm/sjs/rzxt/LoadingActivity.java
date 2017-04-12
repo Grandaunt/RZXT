@@ -13,7 +13,7 @@ public class LoadingActivity extends AppCompatActivity {
     private String TAG = this.getClass().getSimpleName();
     private static final int TIME = 3000;
     private static final int GO_HOME = 15000;
-    private static final int GO_GUIDE = 1001;
+    private static final int GO_MAIN = 15001;
 //    private boolean isFirstIn = false;
 
     private Handler handler = new Handler(){
@@ -25,9 +25,9 @@ public class LoadingActivity extends AppCompatActivity {
                     goHome();
                     finish();
                     break;
-//                case GO_GUIDE:
-//                    goGuide();
-//                    break;
+                case GO_MAIN:
+                    goMain();
+                    break;
             }
         }
     };
@@ -35,26 +35,28 @@ public class LoadingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
-//        SharedPreferences sharedPrefs = getSharedPreferences("RZShare", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPrefs.edit();
-//        editor.putString("CONNENT_NAME",null);
-//        editor.putString("CONNECT_IP",null);
-//        editor.putString("CONNECT_PORT",null);
-//        editor.putString("AUTH_TOKEN", null);
-//        editor.putString("USER_ACCOUNT", null);
-//        editor.putString("USER_NAME", null);
-//        editor.putString("USER_IDE", null);
-//        editor.putString("USER_TEL", null);
-//        editor.putString("USER_DEPT_NAME", null);
-//        editor.putString("USER_DEPT_ORG_CODE", null);
-//        editor.putString("USER_ICON",null);
-//        editor.commit();
+        SharedPreferences sharedPrefs = getSharedPreferences("RZShare", Context.MODE_PRIVATE);
+        String error=sharedPrefs.getString("AUTH_TOKEN", "error");
+        Log.i(TAG,"sharedPrefs.getString(AUTH_TOKEN, error)="+sharedPrefs.getString("AUTH_TOKEN", "error"));
+       if( sharedPrefs.getString("AUTH_TOKEN", "error").equals("error")||sharedPrefs.getString("AUTH_TOKEN", "error").equals(""))
+       {
+           handler.sendEmptyMessageDelayed(GO_HOME,TIME);
+       }
+       else {
+           handler.sendEmptyMessageDelayed(GO_MAIN, TIME);
+       }
         Log.i("LoadingActivity","LoadingActivity欢迎。。。");
-        handler.sendEmptyMessageDelayed(GO_HOME,TIME);
+
     }
     private void goHome(){
         Log.i("LoadingActivity","LoadingActivity欢迎。。。Intent");
         Intent intent = new Intent(LoadingActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void goMain(){
+        Log.i("LoadingActivity","LoadingActivity欢迎。。。Intent");
+        Intent intent = new Intent(LoadingActivity.this,MainActivity.class);
         startActivity(intent);
         finish();
     }

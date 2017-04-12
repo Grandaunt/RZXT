@@ -131,12 +131,18 @@ public class ContentFragment extends ListFragment {
                         ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
                         setListAdapter(adapter);
                     }
+                    else{
+                        Toast.makeText(getActivity(),"无数据",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     if(taskList.size()>0) {
 //                    Log.i(TAG,"item_main_over"+taskList.get(0).get("task_status"));
                         ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
                         setListAdapter(adapter);
+                    }
+                    else{
+                        Toast.makeText(getActivity(),"无数据",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -221,12 +227,18 @@ public class ContentFragment extends ListFragment {
                                 ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_content, new String[]{"task_com_name", "task_com_addr", "task_end_date"}, new int[]{R.id.item_company_name, R.id.item_company_address, R.id.item_date});
                                 setListAdapter(adapter);
                             }
+                            else{
+                                Toast.makeText(getActivity(),"无数据",Toast.LENGTH_SHORT).show();
+                            }
                         }
                         else{
                             if(taskList.size()>0) {
                                 Log.i(TAG, "item_main_over" + taskList.get(0).get("task_status"));
                                 ListAdapter adapter = new SimpleAdapter(getActivity(), taskList, R.layout.item_main_over, new String[]{"task_com_name", "task_com_no", "task_status", "task_end_date"}, new int[]{R.id.item_company_name_2, R.id.item_company_no_2, R.id.item_audit_ruf_2, R.id.item_date_2});
                                 setListAdapter(adapter);
+                            }
+                            else{
+                                Toast.makeText(getActivity(),"无数据",Toast.LENGTH_SHORT).show();
                             }
 
                         }
